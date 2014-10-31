@@ -1,0 +1,3 @@
+name: piDisplay
+main: io.github.EmbeddedPi.piDisplay
+version: 0.0.1
