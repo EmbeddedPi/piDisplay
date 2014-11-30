@@ -1,6 +1,5 @@
 package piDisplay;
 
-
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
@@ -26,7 +25,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String gpioOut = "out";
 	private static final String gpioOn = "1";
 	private static final String gpioOff = "0";
-	private static final int[] gpioChannel = {18,23,24};
+	private static final int[] gpioChannel = {4,7,8,11,14,15,17,18,21,22,23,24,25};
 		
 	@Override
     public void onEnable() {
@@ -62,8 +61,10 @@ public final class Main extends JavaPlugin implements Listener {
 			exception.printStackTrace();
 			}
 		
-		// Switch on server LED
-		writeLED (gpioChannel[0], gpioOn);
+		// Switch on server LEDs
+		for (int i=0; i<5; i++) {
+		writeLED (gpioChannel[i], gpioOn);
+		}
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piBell is ready to go ding dong"); 
 	}
@@ -71,9 +72,9 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         //Switch off all LEDs
-        writeLED (gpioChannel[0], gpioOff);
-        writeLED (gpioChannel[1], gpioOff);
-        writeLED (gpioChannel[2], gpioOff);
+        for (int i=0; i<13; i++) {
+        	writeLED (gpioChannel[i], gpioOff);
+        }
         getLogger().info("piBell has left the building");
     }
     
@@ -150,16 +151,28 @@ public final class Main extends JavaPlugin implements Listener {
     // Update player LED status
     private void updateLED() {
     	if (local > 0) {
-    		writeLED (gpioChannel[1], gpioOn);
+    		for (int i=5; i<9; i++)
+    		{
+    		writeLED (gpioChannel[i], gpioOn);
     		}
+    	}
     	else {
-    		writeLED (gpioChannel[1], gpioOff);
+    		for (int i=5; i<9; i++)
+    		{
+    		writeLED (gpioChannel[i], gpioOff);
+    		}
     		}
     	if (notLocal > 0) {
-    		writeLED (gpioChannel[2], gpioOn); 		
+    		for (int i=9; i<14; i++)
+    		{
+    		writeLED (gpioChannel[i], gpioOn);
+    		}
     		}
     	else {
-    		writeLED (gpioChannel[2], gpioOff);    			
+    		for (int i=9; i<14; i++)
+    		{
+    		writeLED (gpioChannel[i], gpioOff);
+    		}	
     		}	
     }
     
