@@ -25,7 +25,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String gpioOut = "out";
 	private static final String gpioOn = "1";
 	private static final String gpioOff = "0";
-	private static final int[] gpioChannel = {4,7,8,11,14,15,17,18,21,22,23,24,25};
+	private static final int[] gpioChannel = {4,17,14,15,21,22,18,23,25,8,7,24,11};
 		
 	@Override
     public void onEnable() {
@@ -62,9 +62,9 @@ public final class Main extends JavaPlugin implements Listener {
 			}
 		
 		// Switch on server LEDs
-		for (int i=0; i<5; i++) {
-		writeLED (gpioChannel[i], gpioOn);
-		}
+		// for (int i=0; i<5; i++) {
+		// writeLED (gpioChannel[i], gpioOn);
+		// }
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piBell is ready to go ding dong"); 
 	}
@@ -72,7 +72,7 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         //Switch off all LEDs
-        for (int i=0; i<13; i++) {
+        for (int i=0; i<14; i++) {
         	writeLED (gpioChannel[i], gpioOff);
         }
         getLogger().info("piBell has left the building");
@@ -80,7 +80,7 @@ public final class Main extends JavaPlugin implements Listener {
     
     // Someone joins server
     @EventHandler
-    public void onLogin(PlayerJoinEvent event) {
+    public void onLogin(PlayerJoinEvent event) throws Exception {
     	// Check whether internal or external IP address
     	recentPlayer = event.getPlayer().getName();
     	recentPlayerIP = event.getPlayer().getAddress().getHostString();
@@ -88,15 +88,13 @@ public final class Main extends JavaPlugin implements Listener {
     	isLocal();
     	// Update local/notLocal LED status according
     	updateLED();
-        // TODO Play a sound on server's speakers
-        // playsound("random.fuse");
         // The following lines are for test purposes only
     	debugMessage();	
     }
     
     // Someone leaves server
     @EventHandler
-    public void onLogout(PlayerQuitEvent event) {
+    public void onLogout(PlayerQuitEvent event) throws Exception{
     	// Check whether internal or external IP address
     	recentPlayer = event.getPlayer().getName();
     	recentPlayerIP = event.getPlayer().getAddress().getHostString();
@@ -104,8 +102,6 @@ public final class Main extends JavaPlugin implements Listener {
     	isLocal();
     	// Update local/notLocal LED status according
     	updateLED();
-    	// TODO Play a sound on server's speakers
-    	// playsound("mob.creeper.death");
     	// The following lines are for test purposes only
     	debugMessage();
     }
@@ -149,15 +145,16 @@ public final class Main extends JavaPlugin implements Listener {
     	}
 
     // Update player LED status
-    private void updateLED() {
+    private void updateLED() throws InterruptedException{
     	if (local > 0) {
-    		for (int i=5; i<9; i++)
+    		for (int i=0; i<14; i++)
     		{
     		writeLED (gpioChannel[i], gpioOn);
+    		sleep(500);
     		}
     	}
     	else {
-    		for (int i=5; i<9; i++)
+    		for (int i=0; i<14; i++)
     		{
     		writeLED (gpioChannel[i], gpioOff);
     		}
@@ -189,6 +186,11 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
+    
+    private static void sleep(int i) throws InterruptedException{
+    	Thread.sleep(i);
+    }
+       
     // Test messages to server log
     private void debugMessage() {
     	String joinString ="";
