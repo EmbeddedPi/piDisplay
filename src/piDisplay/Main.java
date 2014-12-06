@@ -157,6 +157,7 @@ public final class Main extends JavaPlugin implements Listener {
     		for (int i=0; i<14; i++)
     		{
     		writeLED (gpioChannel[i], gpioOff);
+    		sleep(500);
     		}
     		}
     	if (notLocal > 0) {
