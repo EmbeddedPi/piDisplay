@@ -66,16 +66,16 @@ public final class Main extends JavaPlugin implements Listener {
 		// writeLED (gpioChannel[i], gpioOn);
 		// }
 		// TODO Make a list of players on server with an ArrayList
-		getLogger().info("piBell is ready to go ding dong"); 
+		getLogger().info("piDisplay is ready to display stuff"); 
 	}
  
     @Override
     public void onDisable() {
         //Switch off all LEDs
-        for (int i=0; i<14; i++) {
-        	writeLED (gpioChannel[i], gpioOff);
-        }
-        getLogger().info("piBell has left the building");
+        //for (int i=0; i<14; i++) {
+        //	writeLED (gpioChannel[i], gpioOff);
+        //}
+        getLogger().info("piDisplay has switched off");
     }
     
     // Someone joins server
@@ -150,14 +150,14 @@ public final class Main extends JavaPlugin implements Listener {
     		for (int i=0; i<14; i++)
     		{
     		writeLED (gpioChannel[i], gpioOn);
-    		sleep(500);
+    		sleep(50);
     		}
-    	}
+    	} 
     	else {
     		for (int i=0; i<14; i++)
     		{
     		writeLED (gpioChannel[i], gpioOff);
-    		sleep(500);
+    		sleep(50);
     		}
     		}
     	if (notLocal > 0) {
@@ -188,7 +188,7 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     
-    private static void sleep(int i) throws InterruptedException{
+    private void sleep(int i) throws InterruptedException{
     	Thread.sleep(i);
     }
        
@@ -205,7 +205,9 @@ public final class Main extends JavaPlugin implements Listener {
     	getLogger().info("They live at " + recentPlayerIP);  	
     	getLogger().info("Are they local is " + areYouLocal);
     	getLogger().info("Locals online = " + local);
-    	getLogger().info("Not locals online = " + notLocal);   	
+    	getLogger().info("Not locals online = " + notLocal);
+    	LCDDriver.driverTest();
+    	getLogger().info("just done a call to LCDDRiver.driverTest");
     }
 }
 
