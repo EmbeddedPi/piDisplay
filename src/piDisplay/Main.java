@@ -5,8 +5,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import java.io.File;
-import java.io.FileWriter;
+// import java.io.File;
+// import java.io.FileWriter;
 
 public final class Main extends JavaPlugin implements Listener {
 	
@@ -16,6 +16,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private boolean recentJoin = false;
 	private String recentPlayer = "";
 	private String recentPlayerIP = "";
+	/*
 	private static final String gpioPath="/sys/class/gpio";
 	private static final String exportPath= gpioPath + "/export";
 	private static final String unexportPath= gpioPath + "/unexport";
@@ -23,8 +24,12 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String directionPath= devicePath + "/direction";
 	private static final String valuePath= devicePath + "/value";
 	private static final String gpioOut = "out";
-	private static final String gpioOn = "1";
-	private static final String gpioOff = "0";
+	*/
+	private static final int powerLED = 12;
+	// private static final int backlightLED = 11;
+	public static String LCDStatus = "Off";
+	public static final String gpioOn = "1";
+	public static final String gpioOff = "0";
 	private static final int[] gpioChannel = {4,17,14,15,21,22,18,23,25,8,7,24,11};
 		
 	@Override
@@ -33,6 +38,9 @@ public final class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 				
 		// Open file handles for GPIO unexport and export
+		gpioControl.initialiseGpio (gpioChannel);
+		gpioControl.writePin (gpioChannel[powerLED], gpioOn);
+		/*
 		try {
 			FileWriter unexportFile = new FileWriter(unexportPath);
 			FileWriter exportFile = new FileWriter(exportPath);
@@ -60,6 +68,7 @@ public final class Main extends JavaPlugin implements Listener {
 		catch (Exception exception) {
 			exception.printStackTrace();
 			}
+		*/
 		
 		// Switch on server LEDs
 		// for (int i=0; i<5; i++) {
@@ -71,6 +80,7 @@ public final class Main extends JavaPlugin implements Listener {
  
     @Override
     public void onDisable() {
+    	gpioControl.writePin (gpioChannel[powerLED], gpioOff);
         //Switch off all LEDs
         //for (int i=0; i<14; i++) {
         //	writeLED (gpioChannel[i], gpioOff);
@@ -87,7 +97,10 @@ public final class Main extends JavaPlugin implements Listener {
     	recentJoin = true;
     	isLocal();
     	// Update local/notLocal LED status according
-    	updateLED();
+    	// TODO check playerArray as currently just handles one player
+    	LCDStatus = "On";
+    	LCDDriver.updateLCD(LCDStatus);
+    	LCDDriver.backlightControl (gpioOn);
         // The following lines are for test purposes only
     	debugMessage();	
     }
@@ -101,11 +114,14 @@ public final class Main extends JavaPlugin implements Listener {
     	recentJoin = false;
     	isLocal();
     	// Update local/notLocal LED status according
-    	updateLED();
+    	// TODO check playerArray as currently just handles one player
+    	LCDStatus = "Off";
+    	LCDDriver.updateLCD(LCDStatus);
+    	LCDDriver.backlightControl (gpioOff);
     	// The following lines are for test purposes only
     	debugMessage();
     }
-
+/*
     // Variable setting for device path
     private static String getDevicePath(int pinNumber) {
  	   return String.format(devicePath, pinNumber);
@@ -120,6 +136,7 @@ public final class Main extends JavaPlugin implements Listener {
     private static String getValuePath(int pinNumber) {
  	   return String.format(valuePath, pinNumber);
     }
+*/
     
     // Determine player location
     private void isLocal() {
@@ -145,35 +162,36 @@ public final class Main extends JavaPlugin implements Listener {
     	}
 
     // Update player LED status
-    private void updateLED() throws InterruptedException{
+    /*
+    private void updateLCD() throws InterruptedException{
     	if (local > 0) {
-    		for (int i=0; i<14; i++)
+    		for (int i=0; i<11; i++)
     		{
-    		writeLED (gpioChannel[i], gpioOn);
+    		gpioControl.writePin (gpioChannel[i], gpioOn);
+    		sleep(150);
+    		}
+    		for (int i=9; i>-1; i--)
+    		{
+    		gpioControl.writePin (gpioChannel[i], gpioOff);
+    		sleep(150);
+    		}
+    		for (int i=0; i<11; i++)
+    		{
+    		gpioControl.writePin (gpioChannel[i], gpioOn);
     		sleep(50);
     		}
     	} 
     	else {
-    		for (int i=0; i<14; i++)
+    		for (int i=0; i<11; i++)
     		{
-    		writeLED (gpioChannel[i], gpioOff);
+    		gpioControl.writePin (gpioChannel[i], gpioOff);
     		sleep(50);
     		}
-    		}
-    	if (notLocal > 0) {
-    		for (int i=9; i<14; i++)
-    		{
-    		writeLED (gpioChannel[i], gpioOn);
-    		}
-    		}
-    	else {
-    		for (int i=9; i<14; i++)
-    		{
-    		writeLED (gpioChannel[i], gpioOff);
-    		}	
-    		}	
+    	}       	
     }
-    
+*/
+
+/*
     // LED IO 
     private void writeLED (int channel, String status) {
     	try {
@@ -186,12 +204,14 @@ public final class Main extends JavaPlugin implements Listener {
         	exception.printStackTrace();
         }
     }
+*/
     
-    
+/*    
     private void sleep(int i) throws InterruptedException{
     	Thread.sleep(i);
     }
-       
+*/
+    
     // Test messages to server log
     private void debugMessage() {
     	String joinString ="";
