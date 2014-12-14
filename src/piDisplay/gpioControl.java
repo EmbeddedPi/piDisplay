@@ -45,15 +45,13 @@ public static void initialiseGpio (int [] gpioChannel) {
 			
 }
 
-
-// TODO Write an overloaded single integer version of initialiseGpio
-/*
- * public static void initialiseGpio (int gpioChannel) {
- * 	private  int[] gpioChannel = {0}
- *  gpioChannel[0] = gpioChannel
- *  initialiseGpio (gpioChannel)
- *  }
- */
+// Overloaded single integer version of initialiseGpio
+ public static void initialiseGpio (int singleChannel) {
+	  int[] gpioChannel = {0};
+	  gpioChannel[0] = singleChannel;
+	  initialiseGpio (gpioChannel);
+}
+ 
 
 // Variable setting for device path
 private static String getDevicePath(int pinNumber) {
@@ -71,7 +69,6 @@ private static String getValuePath(int pinNumber) {
 }
 
 // LED IO 
-
 public static void writePin (int channel, String status) {
 	try {
  		FileWriter commandFile = new FileWriter(getValuePath(channel));

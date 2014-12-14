@@ -14,35 +14,33 @@ public final class Main extends JavaPlugin implements Listener {
 	private boolean recentJoin = false;
 	private String recentPlayer = "";
 	private String recentPlayerIP = "";
-	private static final int powerLED = 12;
+	private static final int powerLED = 11;
 	public static String LCDStatus = "Off";
-	public static final String gpioOn = "1";
-	public static final String gpioOff = "0";
-	// TODO remove last elements related to LCD
-	private static final int[] gpioChannel = {4,17,14,15,21,22,18,23,25,8,7,24,11};
-		
+	public static final String LEDOn = "1";
+	public static final String LEDOff = "0";
+	
 	@Override
     public void onEnable() {
 		// register listener
 		getServer().getPluginManager().registerEvents(this, this);
-				
-		// Open file handles for GPIO unexport and export
-		// TODO Split LCD and LED pin initialisations
-		gpioControl.initialiseGpio (gpioChannel);
-		// TODO Change to non array call
-		gpioControl.writePin (gpioChannel[powerLED], gpioOn);
-		
+		// LCD and LED pin initialisations
+		gpioControl.initialiseGpio(powerLED);
+		LCDDriver.initialiseLCD ();
+		// Switch on power LED
+		gpioControl.writePin (powerLED, LEDOn);
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piDisplay is ready to display stuff"); 
 	}
  
     @Override
     public void onDisable() {
-    	// TODO Change to non array call
-    	gpioControl.writePin (gpioChannel[powerLED], gpioOff);
-    	// TODO Switch off backlight
     	// TODO Clear LCD
-        //Switch off all LEDs
+    	LCDStatus = "Off";
+    	// Switch off backlight
+    	LCDDriver.backlightControl (LEDOff);
+    	// Switch off power LED
+    	gpioControl.writePin (powerLED, LEDOff);
+    	//Switch off all LEDs
         //for (int i=0; i<14; i++) {
         //	writeLED (gpioChannel[i], gpioOff);
         //}
@@ -61,7 +59,7 @@ public final class Main extends JavaPlugin implements Listener {
     	// TODO check playerArray as currently just handles one player
     	LCDStatus = "On";
     	LCDDriver.updateLCD(LCDStatus);
-    	LCDDriver.backlightControl (gpioOn);
+    	LCDDriver.backlightControl (LEDOn);
         // The following lines are for test purposes only
     	debugMessage();	
     }
@@ -78,7 +76,7 @@ public final class Main extends JavaPlugin implements Listener {
     	// TODO check playerArray as currently just handles one player
     	LCDStatus = "Off";
     	LCDDriver.updateLCD(LCDStatus);
-    	LCDDriver.backlightControl (gpioOff);
+    	LCDDriver.backlightControl (LEDOff);
     	// The following lines are for test purposes only
     	debugMessage();
     }
@@ -120,7 +118,6 @@ public final class Main extends JavaPlugin implements Listener {
     	getLogger().info("Are they local is " + areYouLocal);
     	getLogger().info("Locals online = " + local);
     	getLogger().info("Not locals online = " + notLocal);
-    	getLogger().info("just done a call to LCDDRiver.driverTest");
     }
 }
 
