@@ -3,9 +3,7 @@ package piDisplay;
 import java.io.File;
 import java.io.FileWriter;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-public class gpioControl extends JavaPlugin {
+public class gpioControl {
 	
 	private static final String gpioPath="/sys/class/gpio";
 	private static final String exportPath= gpioPath + "/export";
@@ -14,16 +12,7 @@ public class gpioControl extends JavaPlugin {
 	private static final String directionPath= devicePath + "/direction";
 	private static final String valuePath= devicePath + "/value";
 	private static final String gpioOut = "out";
-//	private static final String gpioOn = "1";
-//	private static final String gpioOff = "0";
-//	private static final int[] gpioChannel = {4,17,14,15,21,22,18,23,25,8,7,24,11};
 	
-
-public static void gpioTest() {
-	// getLogger().info("gpioControl testline being called from LCDDriver");
-	System.out.println("gpioControl testline being called from LCDDriver");
-}
-
 public static void initialiseGpio (int [] gpioChannel) {
 	// Open file handles for GPIO unexport and export
 			try {
@@ -56,6 +45,15 @@ public static void initialiseGpio (int [] gpioChannel) {
 			
 }
 
+
+// TODO Write an overloaded single integer version of initialiseGpio
+/*
+ * public static void initialiseGpio (int gpioChannel) {
+ * 	private  int[] gpioChannel = {0}
+ *  gpioChannel[0] = gpioChannel
+ *  initialiseGpio (gpioChannel)
+ *  }
+ */
 
 // Variable setting for device path
 private static String getDevicePath(int pinNumber) {

@@ -1,17 +1,10 @@
 package piDisplay;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-public class LCDDriver extends JavaPlugin {
+public class LCDDriver {
 	
 	private static final int backlightLED = 11;
+	// TODO remove last element unrelated to LCD
 	private static final int[] gpioChannel = {4,17,14,15,21,22,18,23,25,8,7,24,11};
-
-public static void driverTest() {
-	// getLogger().info("LCDDriver testline being called from piDisplay");
-	System.out.println("LCDDriver testline being called from piDisplay");
-	gpioControl.gpioTest ();
-	}
 
 public static void backlightControl (String backlightStatus) {
 gpioControl.writePin (gpioChannel[backlightLED], backlightStatus);
@@ -24,7 +17,7 @@ public static void updateLCD(String LCDStatus) throws InterruptedException{
 		gpioControl.writePin (gpioChannel[i], Main.gpioOn);
 		sleep(150);
 		}
-		for (int i=9; i>-1; i--)
+		for (int i=10; i>-1; i--)
 		{
 		gpioControl.writePin (gpioChannel[i], Main.gpioOff);
 		sleep(150);
