@@ -68,7 +68,23 @@ private static String getValuePath(int pinNumber) {
 	   return String.format(valuePath, pinNumber);
 }
 
-// LED IO 
+// TODO Check this bit works, send a an array form LCDDriver
+public static void writePin (int [] gpioChannel, String status) {
+	try {
+		for (Integer pin : gpioChannel) {
+ 		FileWriter commandFile = new FileWriter(getValuePath(pin));
+ 		commandFile.write(status);
+ 		commandFile.flush();
+ 		commandFile.close();
+ 		}
+    }
+    catch (Exception exception) {
+    	exception.printStackTrace();
+    }
+	
+}
+
+// Overloaded array version of WritePin
 public static void writePin (int channel, String status) {
 	try {
  		FileWriter commandFile = new FileWriter(getValuePath(channel));

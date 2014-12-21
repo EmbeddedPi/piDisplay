@@ -5,6 +5,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+// These imports are part of the test code to be removed once LCD driver is working
+import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
+import org.bukkit.Material;
+import org.bukkit.event.block.BlockPlaceEvent;
+// End of test code to be removed once LCD driver is working
+
 
 public final class Main extends JavaPlugin implements Listener {
 	
@@ -18,6 +25,9 @@ public final class Main extends JavaPlugin implements Listener {
 	public static String LCDStatus = "Off";
 	public static final String LEDOn = "1";
 	public static final String LEDOff = "0";
+	// This declaration is part of the test code to be removed once3 LCD driver is working
+	public String testLEDStatus = "1";
+	// End of test code to be removed once LCD driver is working
 	
 	@Override
     public void onEnable() {
@@ -40,7 +50,7 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.backlightControl (LEDOff);
     	// Switch off power LED
     	gpioControl.writePin (powerLED, LEDOff);
-    	//Switch off all LEDs
+    	//Switch off all LEDsfinal 
         //for (int i=0; i<14; i++) {
         //	writeLED (gpioChannel[i], gpioOff);
         //}
@@ -80,6 +90,26 @@ public final class Main extends JavaPlugin implements Listener {
     	// The following lines are for test purposes only
     	debugMessage();
     }
+    
+    
+   // Detect when a block has been placed, test code to be removed once LCD driver is written and tested
+    @EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) throws Exception{
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		Material mat = block.getType(); 
+
+		player.sendMessage("You placed a block with ID : " + mat);//Display a message to the player telling them what type of block they placed.
+		if (testLEDStatus.matches("0")) {
+			testLEDStatus= "1";
+		}
+		else {
+			testLEDStatus= "0";
+		}
+		LCDDriver.testByteWrite (testLEDStatus);
+		
+	}
+    // End of test code to be removed once LCD driver is working
     
     // Determine player location
     private void isLocal() {
