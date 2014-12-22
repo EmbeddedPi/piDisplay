@@ -25,16 +25,21 @@ public final class Main extends JavaPlugin implements Listener {
 	private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
-	// This declaration is part of the test code to be removed once3 LCD driver is working
+	private static final String LEDOut = "out";
+	// This declaration is part of the test code to be removed once LCD driver is working
 	private String testLEDStatus = "1";
+	private String testByte;
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
     public void onEnable() {
 		// register listener
 		getServer().getPluginManager().registerEvents(this, this);
+		// TODO Test code to read and display data LED status
+		testByte = LCDDriver.testByteRead();
+		getLogger().info("Data register value is currently " + testByte);
 		// LCD and LED pin initialisations
-		gpioControl.initialiseGpio(powerLED);
+		gpioControl.initialiseGpio(powerLED, LEDOut);
 		LCDDriver.initialiseLCD ();
 		// Switch on power LED
 		gpioControl.writePin (powerLED, LEDOn);
@@ -70,7 +75,7 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDStatus = "On";
     	LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (LEDOn);
-        // The following lines are for test purposes only
+        // The following lines are for test purposes only"
     	debugMessage();	
     }
     
@@ -90,7 +95,7 @@ public final class Main extends JavaPlugin implements Listener {
     	// The following lines are for test purposes only
     	debugMessage();
     }
-    
+   
     
    // Detect when a block has been placed, test code to be removed once LCD driver is written and tested
     @EventHandler

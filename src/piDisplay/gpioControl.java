@@ -11,9 +11,8 @@ public class gpioControl {
 	private static final String devicePath= gpioPath + "/gpio%d";
 	private static final String directionPath= devicePath + "/direction";
 	private static final String valuePath= devicePath + "/value";
-	private static final String gpioOut = "out";
 	
-public static void initialiseGpio (int [] gpioChannel) {
+public static void initialiseGpio (int [] gpioChannel, String direction) {
 	// Open file handles for GPIO unexport and export
 			try {
 				FileWriter unexportFile = new FileWriter(unexportPath);
@@ -31,7 +30,7 @@ public static void initialiseGpio (int [] gpioChannel) {
 					exportFile.flush();
 					//Set direction file
 					FileWriter directionFile = new FileWriter(getDirectionPath(channel));
-					directionFile.write(gpioOut);
+					directionFile.write(direction);
 					directionFile.flush();
 					directionFile.close();
 					}
@@ -46,10 +45,10 @@ public static void initialiseGpio (int [] gpioChannel) {
 }
 
 // Overloaded single integer version of initialiseGpio
- public static void initialiseGpio (int singleChannel) {
+ public static void initialiseGpio (int singleChannel, String direction) {
 	  int[] gpioChannel = {0};
 	  gpioChannel[0] = singleChannel;
-	  initialiseGpio (gpioChannel);
+	  initialiseGpio (gpioChannel, direction);
 }
  
 //TODO Check this bit works, send a an array form LCDDriver
@@ -59,30 +58,24 @@ public static void writePin (int channel, String status) {
 		commandFile.write(status);
 		commandFile.flush();
 		commandFile.close();
-  }
-  catch (Exception exception) {
+	}
+	catch (Exception exception) {
   	exception.printStackTrace();
   }
 }
 
 // Overloaded array version of WritePin 
 public static void writePin (int [] gpioChannel, String status) {
-//	try {
-		for (Integer pin : gpioChannel) {
- 		writePin(pin, status);
- 		}
-//    }
-//    catch (Exception exception) {
-//    	exception.printStackTrace();
-//    }
-	
+	for (Integer pin : gpioChannel) {
+ 	writePin(pin, status);
+ 	}
 }
 
 public String readPin() {
 	final String status = "";
 //	TODO Make some code to read pin status
 	return status;
-	}
+}
 
 //Variable setting for device path
 private static String getDevicePath(int pinNumber) {
