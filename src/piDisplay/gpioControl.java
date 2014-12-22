@@ -52,56 +52,51 @@ public static void initialiseGpio (int [] gpioChannel) {
 	  initialiseGpio (gpioChannel);
 }
  
-
-// Variable setting for device path
-private static String getDevicePath(int pinNumber) {
-	   return String.format(devicePath, pinNumber);
-}
-
-// Variable setting for direction path
-private static String getDirectionPath(int pinNumber) {
-	   return String.format(directionPath, pinNumber);
-}
-
-// Variable setting for value path
-private static String getValuePath(int pinNumber) {
-	   return String.format(valuePath, pinNumber);
-}
-
-// TODO Check this bit works, send a an array form LCDDriver
-public static void writePin (int [] gpioChannel, String status) {
+//TODO Check this bit works, send a an array form LCDDriver
+public static void writePin (int channel, String status) {
 	try {
+		FileWriter commandFile = new FileWriter(getValuePath(channel));
+		commandFile.write(status);
+		commandFile.flush();
+		commandFile.close();
+  }
+  catch (Exception exception) {
+  	exception.printStackTrace();
+  }
+}
+
+// Overloaded array version of WritePin 
+public static void writePin (int [] gpioChannel, String status) {
+//	try {
 		for (Integer pin : gpioChannel) {
- 		FileWriter commandFile = new FileWriter(getValuePath(pin));
- 		commandFile.write(status);
- 		commandFile.flush();
- 		commandFile.close();
+ 		writePin(pin, status);
  		}
-    }
-    catch (Exception exception) {
-    	exception.printStackTrace();
-    }
+//    }
+//    catch (Exception exception) {
+//    	exception.printStackTrace();
+//    }
 	
 }
 
-// Overloaded array version of WritePin
-public static void writePin (int channel, String status) {
-	try {
- 		FileWriter commandFile = new FileWriter(getValuePath(channel));
- 		commandFile.write(status);
- 		commandFile.flush();
- 		commandFile.close();
-    }
-    catch (Exception exception) {
-    	exception.printStackTrace();
-    }
-}
-		
 public String readPin() {
 	final String status = "";
 //	TODO Make some code to read pin status
 	return status;
 	}
 
+//Variable setting for device path
+private static String getDevicePath(int pinNumber) {
+	   return String.format(devicePath, pinNumber);
+}
+
+//Variable setting for direction path
+private static String getDirectionPath(int pinNumber) {
+	   return String.format(directionPath, pinNumber);
+}
+
+//Variable setting for value path
+private static String getValuePath(int pinNumber) {
+	   return String.format(valuePath, pinNumber);
+}
 
 }

@@ -22,11 +22,11 @@ public final class Main extends JavaPlugin implements Listener {
 	private String recentPlayer = "";
 	private String recentPlayerIP = "";
 	private static final int powerLED = 11;
-	public static String LCDStatus = "Off";
-	public static final String LEDOn = "1";
-	public static final String LEDOff = "0";
+	private static String LCDStatus = "Off";
+	private static final String LEDOn = "1";
+	private static final String LEDOff = "0";
 	// This declaration is part of the test code to be removed once3 LCD driver is working
-	public String testLEDStatus = "1";
+	private String testLEDStatus = "1";
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
