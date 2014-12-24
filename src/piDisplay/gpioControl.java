@@ -51,7 +51,7 @@ public static void initialiseGpio (int [] gpioChannel, String direction) {
 	  initialiseGpio (gpioChannel, direction);
 }
  
-//TODO Check this bit works, send a an array form LCDDriver
+// Write to a single gpio pin
 public static void writePin (int channel, String status) {
 	try {
 		FileWriter commandFile = new FileWriter(getValuePath(channel));
@@ -64,6 +64,7 @@ public static void writePin (int channel, String status) {
   }
 }
 
+// TODO Possibly delete this later.
 // Overloaded array version of WritePin 
 public static void writePin (int [] gpioChannel, String status) {
 	for (Integer pin : gpioChannel) {
@@ -72,7 +73,7 @@ public static void writePin (int [] gpioChannel, String status) {
 }
 
 public String readPin() {
-	final String status = "";
+	String status = "";
 //	TODO Make some code to read pin status
 	return status;
 }

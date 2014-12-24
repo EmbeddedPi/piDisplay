@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-// These imports are part of the test code to be removed once LCD driver is working
+// Test code to be removed once LCD driver is working
 import org.bukkit.entity.Player;
 import org.bukkit.block.Block;
 import org.bukkit.Material;
@@ -26,8 +26,8 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
 	private static final String LEDOut = "out";
-	// This declaration is part of the test code to be removed once LCD driver is working
-	private String testLEDStatus = "1";
+	// Test code to be removed once LCD driver is working
+	String testLEDStatus = "1";
 	private String testByte;
 	// End of test code to be removed once LCD driver is working
 	
@@ -35,9 +35,6 @@ public final class Main extends JavaPlugin implements Listener {
     public void onEnable() {
 		// register listener
 		getServer().getPluginManager().registerEvents(this, this);
-		// TODO Test code to read and display data LED status
-		testByte = LCDDriver.testByteRead();
-		getLogger().info("Data register value is currently " + testByte);
 		// LCD and LED pin initialisations
 		gpioControl.initialiseGpio(powerLED, LEDOut);
 		LCDDriver.initialiseLCD ();
@@ -55,11 +52,7 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.backlightControl (LEDOff);
     	// Switch off power LED
     	gpioControl.writePin (powerLED, LEDOff);
-    	//Switch off all LEDsfinal 
-        //for (int i=0; i<14; i++) {
-        //	writeLED (gpioChannel[i], gpioOff);
-        //}
-        getLogger().info("piDisplay has switched off");
+    	getLogger().info("piDisplay has switched off");
     }
     
     // Someone joins server
@@ -71,6 +64,9 @@ public final class Main extends JavaPlugin implements Listener {
     	recentJoin = true;
     	isLocal();
     	// Update local/notLocal LED status according
+    	// TODO Test code to read and display data LED status
+    	testByte = LCDDriver.testByteRead();
+    	getLogger().info("Data register value is currently " + testByte);
     	// TODO check playerArray as currently just handles one player
     	LCDStatus = "On";
     	LCDDriver.updateLCD(LCDStatus);
@@ -89,6 +85,7 @@ public final class Main extends JavaPlugin implements Listener {
     	isLocal();
     	// Update local/notLocal LED status according
     	// TODO check playerArray as currently just handles one player
+    	// Turn the lights off when you leave!
     	LCDStatus = "Off";
     	LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (LEDOff);
@@ -97,14 +94,15 @@ public final class Main extends JavaPlugin implements Listener {
     }
    
     
-   // Detect when a block has been placed, test code to be removed once LCD driver is written and tested
+   // Detect when a block has been placed, 
+   // Test code to be removed once LCD driver is written and tested
     @EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) throws Exception{
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		Material mat = block.getType(); 
-
-		player.sendMessage("You placed a block with ID : " + mat);//Display a message to the player telling them what type of block they placed.
+		// Display a message to the player telling them what type of block they placed.
+		player.sendMessage("You placed a block with ID : " + mat);
 		if (testLEDStatus.matches("0")) {
 			testLEDStatus= "1";
 		}

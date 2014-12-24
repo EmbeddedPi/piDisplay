@@ -45,24 +45,22 @@ gpioControl.writePin (backlightLED, backlightStatus);
 public static void updateLCD(String LCDStatus) throws InterruptedException {
 	if (LCDStatus.matches("On") ) {
 		gpioControl.writePin (controlChannel[RS], gpioHigh);
-		sleep(50);
 		gpioControl.writePin (controlChannel[readWrite], gpioHigh);
-		sleep(50);
 		gpioControl.writePin (controlChannel[enable], gpioHigh);
-	} 
+		} 
 	else {
 		gpioControl.writePin (controlChannel[RS], gpioLow);
-		sleep(50);
 		gpioControl.writePin (controlChannel[readWrite], gpioLow);
-		sleep(50);
 		gpioControl.writePin (controlChannel[enable], gpioLow);
+		gpioControl.writePin (dataChannel, gpioLow);
 	}
 }  
 
 public static void testByteWrite(String testLEDStatus) throws InterruptedException {
+	// System.out.println( "testLEDStatus is: " + testLEDStatus );
 	if (testLEDStatus.matches("1") ) {
 		
-		for (int i=0; i<8; i++)
+		for (int i = 0; i<8; i++)
 		{
 		gpioControl.writePin (dataChannel[i], gpioHigh);
 		sleep(50);
@@ -84,7 +82,6 @@ public static void testByteWrite(String testLEDStatus) throws InterruptedExcepti
 		gpioControl.writePin (dataChannel[i], gpioLow);
 		sleep(50);
 		}
-		
 		for (int i = 0; i<8; i++)
 		{
 		gpioControl.writePin(dataChannel, gpioHigh);
@@ -101,20 +98,25 @@ public static String testByteRead() {
 	String dataByte = "";
 	try {gpioControl.initialiseGpio (dataChannel, gpioIn);
 	// TODO Add code to read dataChannel here.
+	System.out.println( "Testing read code: ");
+	sleep(500);
 	}
 	catch (Exception exception) {
 		exception.printStackTrace();
 		}
+	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }
 
 
 // TODO Fix this bit
 private static void writeByte (String hexByte){
+	/*
 	// Some code to write a whole byte here
 	int decimal = Integer.parseInt(hexByte);
 	int[] data = {0,0,0,0,0,0,0,0};
-	String output = "";
+	System.out.println( "Decimal version is: " + decimal );
+	//String bitOutput = "";
 	data[0] = decimal&1;
 	data[1] = decimal&2;
 	data[2] = decimal&4;
@@ -123,12 +125,14 @@ private static void writeByte (String hexByte){
 	data[5] = decimal&32;
 	data[6] = decimal&64;
 	data[7] = decimal&128;
-	for (int i=0; i<8; i++) {
-		output = "(((data[i])>0)? gpioHigh : gpioLow)";
-		gpioControl.writePin(dataChannel[i], output);
-	}
-	
+	//for (int i=0; i<8; i++) {
+	//	bitOutput = (((data[i])>0)? gpioHigh : gpioLow);
+	//	// gpioControl.writePin(dataChannel[i], bitOutput);
+	//}
+	 */
+	gpioControl.writePin(dataChannel[0], gpioHigh);
 }
+
 
 /*
 private void commandWrite(Integer command) {
