@@ -59,37 +59,47 @@ public static void updateLCD(String LCDStatus) throws InterruptedException {
 public static void testByteWrite(String testLEDStatus) throws InterruptedException {
 	// System.out.println( "testLEDStatus is: " + testLEDStatus );
 	if (testLEDStatus.matches("1") ) {
-		
+		/*
 		for (int i = 0; i<8; i++)
 		{
 		gpioControl.writePin (dataChannel[i], gpioHigh);
-		sleep(50);
+		sleep(25);
 		}
 		
 		for (int i = 0; i<8; i++)
 		{
 		gpioControl.writePin(dataChannel, gpioLow);
-		sleep(100);
+		sleep(50);
 		gpioControl.writePin(dataChannel, gpioHigh);
-		sleep(100);
+		sleep(50);
 		}
-		writeByte("AA");
+		*/
+		for (int i =255; i>-1; i--)
+		{
+		writeByte(i);	
+		}
+		// writeByte(0xAA);
 	} 
 	else {
-		
+		/*
 		for (int i=0; i<8; i++)
 		{
 		gpioControl.writePin (dataChannel[i], gpioLow);
-		sleep(50);
+		sleep(25);
 		}
 		for (int i = 0; i<8; i++)
 		{
 		gpioControl.writePin(dataChannel, gpioHigh);
-		sleep(100);
+		sleep(50);
 		gpioControl.writePin(dataChannel, gpioLow);
-		sleep(100);
+		sleep(50);
 		}
-		writeByte("CC");
+		*/
+		for (int i=0; i<256; i++)
+		{
+		writeByte(i);
+		}
+		// writeByte(0xCC);
 	}
 }
 
@@ -110,27 +120,41 @@ public static String testByteRead() {
 
 
 // TODO Fix this bit
-private static void writeByte (String hexByte){
-	/*
-	// Some code to write a whole byte here
-	int decimal = Integer.parseInt(hexByte);
-	int[] data = {0,0,0,0,0,0,0,0};
-	System.out.println( "Decimal version is: " + decimal );
-	//String bitOutput = "";
-	data[0] = decimal&1;
-	data[1] = decimal&2;
-	data[2] = decimal&4;
-	data[3] = decimal&8;
-	data[4] = decimal&16;
-	data[5] = decimal&32;
-	data[6] = decimal&64;
-	data[7] = decimal&128;
-	//for (int i=0; i<8; i++) {
-	//	bitOutput = (((data[i])>0)? gpioHigh : gpioLow);
-	//	// gpioControl.writePin(dataChannel[i], bitOutput);
-	//}
-	 */
-	gpioControl.writePin(dataChannel[0], gpioHigh);
+private static void writeByte (int Byte) throws InterruptedException {
+	// Test lined for debugging
+	// System.out.println( "hexByte is: " + Byte );
+	// Check within a single byte range
+	if (Byte<0 | Byte>255)
+	{
+		System.out.println(Byte + "isn't in range 0~255");
+		return;
+	}
+	String binary = Integer.toBinaryString (Byte);
+	// Test line to be deleted later
+	// System.out.println("Binary string is " + binary);
+	// Fill to 8 bits if less than 128
+	if (binary.length()<8) {
+		String str = "";
+		{
+		for (int s=0; s<(8-binary.length()); s++) 
+			{
+			str = str + "0";
+			}
+		}
+		binary = str + binary; 
+		// Test line to be deleted later
+		// System.out.println("Adjusted binary string is " + binary);
+	}
+	for (int i = 0; i<8; i++){
+		// Test delay
+		sleep(1);
+		if (binary.charAt(i) == '1') {
+			gpioControl.writePin(dataChannel[(7-i)], gpioHigh);
+		}
+		else {
+			gpioControl.writePin(dataChannel[(7-i)], gpioLow);
+		}
+	}
 }
 
 
