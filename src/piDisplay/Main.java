@@ -32,7 +32,7 @@ public final class Main extends JavaPlugin implements Listener {
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
-    public void onEnable() {
+    public void onEnable(){
 		// register listener
 		getServer().getPluginManager().registerEvents(this, this);
 		// LCD and LED pin initialisations
@@ -57,27 +57,23 @@ public final class Main extends JavaPlugin implements Listener {
     
     // Someone joins server
     @EventHandler
-    public void onLogin(PlayerJoinEvent event) throws Exception {
+    public void onLogin(PlayerJoinEvent event) {
     	// Check whether internal or external IP address
     	recentPlayer = event.getPlayer().getName();
     	recentPlayerIP = event.getPlayer().getAddress().getHostString();
     	recentJoin = true;
     	isLocal();
-    	// Update local/notLocal LED status according
-    	// TODO Test code to read and display data LED status
-    	testByte = LCDDriver.testByteRead();
-    	getLogger().info("Data register value is currently " + testByte);
     	// TODO check playerArray as currently just handles one player
     	LCDStatus = "On";
     	LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (LEDOn);
         // The following lines are for test purposes only"
-    	debugMessage();	
+    	debugMessage();
     }
     
     // Someone leaves server
     @EventHandler
-    public void onLogout(PlayerQuitEvent event) throws Exception{
+    public void onLogout(PlayerQuitEvent event) {
     	// Check whether internal or external IP address
     	recentPlayer = event.getPlayer().getName();
     	recentPlayerIP = event.getPlayer().getAddress().getHostString();
@@ -91,13 +87,15 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.backlightControl (LEDOff);
     	// The following lines are for test purposes only
     	debugMessage();
+    	// TODO Test code to read and display data LED status
+    	testByte = LCDDriver.testByteRead();
+    	getLogger().info("Byte just read is " + testByte);
     }
-   
-    
+     
    // Detect when a block has been placed, 
    // Test code to be removed once LCD driver is written and tested
     @EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) throws Exception{
+	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		Material mat = block.getType(); 
