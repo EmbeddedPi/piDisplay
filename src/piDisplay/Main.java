@@ -87,9 +87,6 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.backlightControl (LEDOff);
     	// The following lines are for test purposes only
     	debugMessage();
-    	// TODO Test code to read and display data LED status
-    	testByte = LCDDriver.testByteRead();
-    	getLogger().info("Byte just read is " + testByte);
     }
      
    // Detect when a block has been placed, 
@@ -108,6 +105,9 @@ public final class Main extends JavaPlugin implements Listener {
 			testLEDStatus= "0";
 		}
 		LCDDriver.testByteWrite (testLEDStatus);
+		// TODO Test code to read and display data LED status
+    	testByte = LCDDriver.testByteRead();
+    	getLogger().info("Byte just read is " + testByte);
 		
 	}
     // End of test code to be removed once LCD driver is working

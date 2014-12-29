@@ -80,14 +80,10 @@ public static void testByteWrite(String testLEDStatus) {
 // TODO complete this method
 public static String testByteRead() {
 	String dataByte = "";
-	try {gpioControl.initialiseGpio (dataChannel, gpioIn);
+	gpioControl.initialiseGpio (dataChannel, gpioIn);
 	// TODO Add code to read dataChannel here.
 	dataByte = gpioControl.readPin(dataChannel);
-	sleep(500);
-	}
-	catch (Exception exception) {
-		exception.printStackTrace();
-		}
+	sleep(10);
 	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }

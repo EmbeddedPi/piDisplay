@@ -78,23 +78,32 @@ public static String readPin(int channel[]) {
 	RandomAccessFile[] raf = new RandomAccessFile[channel.length];
 	
 	byte[] readData = new byte[maxBuffer];
-	String status = "NaffAllHappened";
+	String tempString = "";
+	String status = "";
 	try {
 		for (int i=0; i < raf.length; i++) {
 		raf[i] = new RandomAccessFile(getValuePath(channel[i]), "r");
-		System.out.println(getValuePath(channel[i]));
 		raf[i].seek(0);
 		raf[i].read(readData);
-		System.out.println("readData = " + readData);
+		tempString = new String(readData);
+			if (tempString != "") {
+				status = status + tempString;
+			}
 		}
-		for (int n=0; n < maxBuffer; n++) {
-			System.out.println(readData[n]);
-		}
-		status = new String(readData);
 	}
 	catch (Exception exception) {
   	exception.printStackTrace();
 	}
+	// Tidy up by removing newline characters from between channels
+	status = status.replace("\n","");
+	// Some test lines just to prove that reverse worked
+	// status = "Original" + status;
+	// System.out.println(status);
+	status = new StringBuilder(status).reverse().toString();
+	// TODO This line is broken
+	int test = Integer.parseInt(status,2);
+	System.out.println(test);
+	System.out.println("Revised" + status);
 	return status;
 }
 
