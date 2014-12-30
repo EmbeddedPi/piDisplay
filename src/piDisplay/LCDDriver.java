@@ -78,8 +78,8 @@ public static void testByteWrite(String testLEDStatus) {
 }
 
 // TODO complete this method
-public static String testByteRead() {
-	String dataByte = "";
+public static int testByteRead() {
+	int dataByte = 667;
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
 	// TODO Add code to read dataChannel here.
 	dataByte = gpioControl.readPin(dataChannel);

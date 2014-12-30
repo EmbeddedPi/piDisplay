@@ -12,7 +12,7 @@ public class gpioControl {
 	private static final String devicePath= gpioPath + "/gpio%d";
 	private static final String directionPath= devicePath + "/direction";
 	private static final String valuePath= devicePath + "/value";
-	private static final int maxBuffer = 256;
+	private static final int maxBuffer = 128;
 	
 public static void initialiseGpio (int [] gpioChannel, String direction) {
 	// Open file handles for GPIO unexport and export
@@ -74,10 +74,10 @@ public static void writePin (int [] gpioChannel, String status) {
  	}
 }
 
-public static String readPin(int channel[]) {
+public static int readPin(int channel[]) {
 	RandomAccessFile[] raf = new RandomAccessFile[channel.length];
-	
 	byte[] readData = new byte[maxBuffer];
+	int test = 666;
 	String tempString = "";
 	String status = "";
 	try {
@@ -96,23 +96,25 @@ public static String readPin(int channel[]) {
 	}
 	// Tidy up by removing newline characters from between channels
 	status = status.replace("\n","");
-	// Some test lines just to prove that reverse worked
-	// status = "Original" + status;
-	// System.out.println(status);
+	// Reverse so bit order is MSB -> LSB
 	status = new StringBuilder(status).reverse().toString();
-	// TODO This line is broken
-	int test = Integer.parseInt(status,2);
+	String numberString = status.replaceAll("[^0-1]","");
+	try {
+	test = Integer.parseInt(numberString,2);
 	System.out.println(test);
-	System.out.println("Revised" + status);
-	return status;
+	}
+	catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	}
+	return test;
 }
 
 //Overloaded single integer version of readPin
-public static String readPin(int singleChannel) {
+public static int readPin(int singleChannel) {
 	  int[] gpioChannel = {0};
-	  String status = "";
+	  // String status = "";
 	  gpioChannel[0] = singleChannel;
-	  status = readPin(gpioChannel);
+	  int status = readPin(gpioChannel);
 	  return status;	  
 }
 

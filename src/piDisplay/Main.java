@@ -28,7 +28,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
 	String testLEDStatus = "1";
-	private String testByte;
+	private int testByte = 668;
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
