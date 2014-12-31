@@ -12,6 +12,7 @@ public class LCDDriver {
 	private static final int readWrite = 1;
 	private static final int enable = 0;
 	private static final int[] dataChannel = {23,18,22,21,15,14,17,4};
+	private static final int busyFlag = 7;
 
 public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
@@ -79,11 +80,11 @@ public static void testByteWrite(String testLEDStatus) {
 
 // TODO complete this method
 public static int testByteRead() {
-	int dataByte = 667;
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
-	// TODO Add code to read dataChannel here.
-	dataByte = gpioControl.readPin(dataChannel);
-	sleep(10);
+	int dataByte = gpioControl.readPin(dataChannel[busyFlag]);
+	// Array read version
+	// gpioControl.initialiseGpio(dataChannel, gpioOut);
+	// Single pin read version
 	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }

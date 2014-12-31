@@ -94,11 +94,10 @@ public static int readPin(int channel[]) {
 	catch (Exception exception) {
   	exception.printStackTrace();
 	}
-	// Tidy up by removing newline characters from between channels
-	status = status.replace("\n","");
+	// Tidy up by removing unwanted characters and newlines
+	String numberString = status.replaceAll("[^0-1]","");
 	// Reverse so bit order is MSB -> LSB
 	status = new StringBuilder(status).reverse().toString();
-	String numberString = status.replaceAll("[^0-1]","");
 	try {
 	test = Integer.parseInt(numberString,2);
 	System.out.println(test);
@@ -112,7 +111,6 @@ public static int readPin(int channel[]) {
 //Overloaded single integer version of readPin
 public static int readPin(int singleChannel) {
 	  int[] gpioChannel = {0};
-	  // String status = "";
 	  gpioChannel[0] = singleChannel;
 	  int status = readPin(gpioChannel);
 	  return status;	  

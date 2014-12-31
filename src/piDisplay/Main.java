@@ -28,7 +28,6 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
 	String testLEDStatus = "1";
-	private int testByte = 668;
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
@@ -106,7 +105,7 @@ public final class Main extends JavaPlugin implements Listener {
 		}
 		LCDDriver.testByteWrite (testLEDStatus);
 		// TODO Test code to read and display data LED status
-    	testByte = LCDDriver.testByteRead();
+    	int testByte = LCDDriver.testByteRead();
     	getLogger().info("Byte just read is " + testByte);
 		
 	}
