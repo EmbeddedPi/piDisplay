@@ -77,7 +77,6 @@ public static void writePin (int [] gpioChannel, String status) {
 public static int readPin(int channel[]) {
 	RandomAccessFile[] raf = new RandomAccessFile[channel.length];
 	byte[] readData = new byte[maxBuffer];
-	int test = 666;
 	String tempString = "";
 	String status = "";
 	try {
@@ -86,26 +85,30 @@ public static int readPin(int channel[]) {
 		raf[i].seek(0);
 		raf[i].read(readData);
 		tempString = new String(readData);
-			if (tempString != "") {
-				status = status + tempString;
-			}
+		//	if (tempString != "") {
+		status = status + tempString;
+		//	}
 		}
 	}
 	catch (Exception exception) {
   	exception.printStackTrace();
 	}
+	System.out.println("Before char strip " + status);
 	// Tidy up by removing unwanted characters and newlines
 	String numberString = status.replaceAll("[^0-1]","");
+	System.out.println("After char strip " + numberString);
 	// Reverse so bit order is MSB -> LSB
-	status = new StringBuilder(status).reverse().toString();
+	numberString = new StringBuilder(numberString).reverse().toString();
+	System.out.println("After reverse " + numberString);
 	try {
-	test = Integer.parseInt(numberString,2);
+	int test = Integer.parseInt(numberString,2);
 	System.out.println(test);
+	return test;
 	}
 	catch (NumberFormatException nfe) {
 		nfe.printStackTrace();
 	}
-	return test;
+	return -1;
 }
 
 //Overloaded single integer version of readPin
