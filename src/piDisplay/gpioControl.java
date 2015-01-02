@@ -77,17 +77,14 @@ public static void writePin (int [] gpioChannel, String status) {
 public static int readPin(int channel[]) {
 	RandomAccessFile[] raf = new RandomAccessFile[channel.length];
 	byte[] readData = new byte[maxBuffer];
-	String tempString = "";
+	// String tempString = "";
 	String status = "";
 	try {
 		for (int i=0; i < raf.length; i++) {
 		raf[i] = new RandomAccessFile(getValuePath(channel[i]), "r");
 		raf[i].seek(0);
 		raf[i].read(readData);
-		tempString = new String(readData);
-		//	if (tempString != "") {
-		status = status + tempString;
-		//	}
+		status = status + new String(readData);
 		}
 	}
 	catch (Exception exception) {
@@ -99,11 +96,11 @@ public static int readPin(int channel[]) {
 	System.out.println("After char strip " + numberString);
 	// Reverse so bit order is MSB -> LSB
 	numberString = new StringBuilder(numberString).reverse().toString();
-	System.out.println("After reverse " + numberString);
+	// System.out.println("After reverse " + numberString);
 	try {
-	int test = Integer.parseInt(numberString,2);
-	System.out.println(test);
-	return test;
+	int pinData = Integer.parseInt(numberString,2);
+	System.out.println(pinData);
+	return pinData;
 	}
 	catch (NumberFormatException nfe) {
 		nfe.printStackTrace();
@@ -115,8 +112,8 @@ public static int readPin(int channel[]) {
 public static int readPin(int singleChannel) {
 	  int[] gpioChannel = {0};
 	  gpioChannel[0] = singleChannel;
-	  int status = readPin(gpioChannel);
-	  return status;	  
+	  int singlePinData = readPin(gpioChannel);
+	  return singlePinData;	  
 }
 
 //Variable setting for device path

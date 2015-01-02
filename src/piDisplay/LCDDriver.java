@@ -18,19 +18,36 @@ public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
 	gpioControl.initialiseGpio (controlChannel, gpioOut);
 	gpioControl.initialiseGpio (dataChannel, gpioOut);
+	backlightControl(gpioHigh);
 	sleep(0);
-	/* Initialisation code
-	 * Function set : 8 bit interface, 2 display lines, 5x8 font
-	 * commandWrite("0x38");
-	 * Entry mode set :Increment auto, display shift off
-	 * commandWrite("0x06");
-	 * Display control : display on, cursor on, no blinking
-	 * commandWrite("0x0E")
-	 * Clear display, set cursor position to zero
-	 * commandWrite("0x01");
-	 * Test line
-	 * dataWrite("P");
-	 * dataWrite("r");
+	// Initialisation code
+	// Function set : 8 bit interface, 2 display lines, 5x8 font
+	commandWrite(0x38);
+	sleep(500);
+	// Entry mode set :Increment auto, display shift off
+	commandWrite(0x06);
+	sleep(500);
+	// Display control : display on, cursor on, no blinking
+	commandWrite(0x0E);
+	sleep(500);
+	// Clear display, set cursor position to zero
+	commandWrite(0x01);
+	sleep(500);
+	// Test line
+	dataWrite(fontTable.convertChar("P"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("r"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("o"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("s"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("p"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("e"));
+	sleep(250);
+	dataWrite(fontTable.convertChar("r"));
+	/* dataWrite("r");
 	 * dataWrite("o");
 	 * dataWrite("s");
 	 * dataWrite("P");
@@ -42,6 +59,36 @@ public static void initialiseLCD () {
 	
 public static void backlightControl (String backlightStatus) {
 	gpioControl.writePin (backlightLED, backlightStatus);
+}
+
+private static void commandWrite(Integer command) {
+	// TODO Code to confirm busyCheck() == false before continuing
+	//while (busyFlagCheck()==true) {
+	sleep(0);
+	//}
+	gpioControl.writePin (controlChannel[RS], gpioLow);
+	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	sleep(500);
+	writeByte(command);
+	sleep(500);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	sleep(500);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
+}
+
+private static void dataWrite(Integer data) {
+	// TODO Code to confirm busyCheck() == false before continuing
+	// while (busyFlagCheck()==true) {
+	sleep(0);
+	// }
+	gpioControl.writePin (controlChannel[RS], gpioHigh);
+	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	sleep(500);
+	writeByte(data);
+	sleep(500);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	sleep(500);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
 // This method is just test code for now
@@ -84,7 +131,7 @@ public static void testByteWrite(String testLEDStatus) {
 	}
 }
 
-// TODO complete this method
+// TODO Possibly remove later
 public static int testByteRead() {
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
 	// int dataByte = gpioControl.readPin(dataChannel[busyFlagPin]);
@@ -107,8 +154,6 @@ private static void writeByte (int Byte) {
 		String str = "";
 		for (int s=0; s<(8-binary.length()); s++) {
 			str = "0" + str;
-			System.out.println("Length is " + binary.length());
-			System.out.println("Binary is " + binary);
 		}
 		binary = str + binary;
 	}
@@ -118,7 +163,10 @@ private static void writeByte (int Byte) {
 	 * sleep(0)
 	 * }
 	 */
+	// Just checking stuff
 	System.out.println("Final binary is " + binary);
+	int testInt = Integer.parseInt(binary, 2);
+	System.out.println("Final hex is " + Integer.toHexString(testInt));
 	for (int i = 0; i<8; i++){
 		if (binary.charAt(i) == '1') {
 			gpioControl.writePin(dataChannel[(7-i)], gpioHigh);
@@ -135,11 +183,11 @@ public static Boolean busyFlagCheck() {
 	Boolean busyFlag = true;
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioHigh);
-	gpioControl.initialiseGpio (dataChannel, gpioIn);
+	gpioControl.initialiseGpio (dataChannel[busyFlagPin], gpioIn);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
 	int status = gpioControl.readPin(dataChannel[busyFlagPin]);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
-	gpioControl.initialiseGpio (dataChannel, gpioOut);
+	gpioControl.initialiseGpio (dataChannel[busyFlagPin], gpioOut);
 	if (status==1) {
 		busyFlag = true;
 	} else {
@@ -148,31 +196,10 @@ public static Boolean busyFlagCheck() {
 	return busyFlag;
 }
 
+
+
+
 /*
-private void commandWrite(Integer command) {
-	// TODO Code to confirm busyCheck() == false before continuing
-	While (busyFlagCheck()) {
-	sleep(0)
-	}
-	gpioControl.writePin (controlChannel[RS], gpioLow);
-	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	TODO Write "command" to dataChannel;
-	gpioControl.writePin (controlChannel[enable], gpioLow);
-}
-
-private void dataWrite(Integer data) {
-	// TODO Code to confirm busyCheck() == false before continuing
-	While (busyFlagCheck()) {
-	sleep(0)
-	}
-	gpioControl.writePin (controlChannel[RS], gpioHigh);
-	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	TODO Write "data" to dataChannel;
-	gpioControl.writePin (controlChannel[enable], gpioLow);
-}
-
 // TODO Possibly remove this after testing
 private integer commandRead(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
@@ -184,6 +211,7 @@ private integer commandRead(Integer command) {
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
 	TODO return(readByte);
+	sleep(500);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 	gpioControl.initialiseGpio (dataChannel, gpioOut);
 }
@@ -199,6 +227,7 @@ private void dataRead(Integer data) {
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
 	TODO return(readByte);
+	sleep(500);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 	gpioControl.initialiseGpio (dataChannel, gpioOut);
 }
