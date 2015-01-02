@@ -22,7 +22,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private String recentPlayer = "";
 	private String recentPlayerIP = "";
 	private static final int powerLED = 11;
-	private static String LCDStatus = "Off";
+	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
 	private static final String LEDOut = "out";
@@ -46,7 +46,7 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
     	// TODO Clear LCD
-    	LCDStatus = "Off";
+    	// LCDStatus = "Off";
     	// Switch off backlight
     	LCDDriver.backlightControl (LEDOff);
     	// Switch off power LED
@@ -63,8 +63,8 @@ public final class Main extends JavaPlugin implements Listener {
     	recentJoin = true;
     	isLocal();
     	// TODO check playerArray as currently just handles one player
-    	LCDStatus = "On";
-    	LCDDriver.updateLCD(LCDStatus);
+    	// LCDStatus = "On";
+    	// LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (LEDOn);
         // The following lines are for test purposes only"
     	debugMessage();
@@ -81,8 +81,8 @@ public final class Main extends JavaPlugin implements Listener {
     	// Update local/notLocal LED status according
     	// TODO check playerArray as currently just handles one player
     	// Turn the lights off when you leave!
-    	LCDStatus = "Off";
-    	LCDDriver.updateLCD(LCDStatus);
+    	// LCDStatus = "Off";
+    	// LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (LEDOff);
     	// The following lines are for test purposes only
     	debugMessage();
@@ -97,6 +97,8 @@ public final class Main extends JavaPlugin implements Listener {
 		Material mat = block.getType(); 
 		// Display a message to the player telling them what type of block they placed.
 		player.sendMessage("You placed a block with ID : " + mat);
+		// TODO add test code utilising block material
+		// SAND, DIRT
 		if (testLEDStatus.matches("0")) {
 			testLEDStatus= "1";
 		}
