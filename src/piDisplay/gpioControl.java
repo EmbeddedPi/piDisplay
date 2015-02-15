@@ -90,10 +90,10 @@ public static int readPin(int channel[]) {
 	catch (Exception exception) {
   	exception.printStackTrace();
 	}
-	System.out.println("Before char strip " + status);
+	// System.out.println("Before char strip " + status);
 	// Tidy up by removing unwanted characters and newlines
 	String numberString = status.replaceAll("[^0-1]","");
-	System.out.println("After char strip " + numberString);
+	// System.out.println("After char strip " + numberString);
 	// Reverse so bit order is MSB -> LSB
 	numberString = new StringBuilder(numberString).reverse().toString();
 	// System.out.println("After reverse " + numberString);
