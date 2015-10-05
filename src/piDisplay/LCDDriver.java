@@ -5,14 +5,20 @@ public class LCDDriver {
 	private static final String gpioHigh = "1";
 	private static final String gpioLow = "0";
 	private static final String gpioOut = "out";
+	/*
+	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final String gpioIn = "in";
+	*/
 	private static final int backlightLED = 24;
 	private static final int [] controlChannel = {25,8,7};
 	private static final int RS = 2;
 	private static final int readWrite = 1;
 	private static final int enable = 0;
 	private static final int[] dataChannel = {23,18,22,21,15,14,17,4};
+	/*
+	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final int busyFlagPin = 7;
+	*/
 
 public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
@@ -95,6 +101,7 @@ private static void dataWrite(Integer data) {
 public static void updateLCD(String LCDStatus) {
 	if (LCDStatus.matches("On") ) {
 		gpioControl.writePin (controlChannel[RS], gpioHigh);
+// TODO Check this line, does read instead of write
 		gpioControl.writePin (controlChannel[readWrite], gpioHigh);
 		gpioControl.writePin (controlChannel[enable], gpioHigh);
 		} 
@@ -131,6 +138,8 @@ public static void testByteWrite(String testLEDStatus) {
 	}
 }
 
+/*
+TODO Temporarily pulled out read code, to be replaced after testing
 // TODO Possibly remove later
 public static int testByteRead() {
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
@@ -141,6 +150,7 @@ public static int testByteRead() {
 	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }
+*/
 
 private static void writeByte (int Byte) {
 	// Check within a single byte range
@@ -176,7 +186,8 @@ private static void writeByte (int Byte) {
 		}
 	}
 }
-
+/*
+TODO Temporarily pulled out read code, to be replaced after testing
 // TODO change back to private once tested
 public static Boolean busyFlagCheck() {
 	// Assume busy by default
@@ -196,7 +207,7 @@ public static Boolean busyFlagCheck() {
 	return busyFlag;
 }
 
-
+*/
 
 
 /*
