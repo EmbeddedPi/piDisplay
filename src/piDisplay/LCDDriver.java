@@ -151,9 +151,9 @@ public static void testByteWrite(String testLEDStatus) {
 		//{
 		//writeByte(i);	
 		//}
-		writeByte(0xAA);
+		dataWrite(0xAA);
 		sleep(500);
-		writeByte(0x55);
+		dataWrite(0x10);
 		sleep(500);
 	} 
 	else {
@@ -161,9 +161,9 @@ public static void testByteWrite(String testLEDStatus) {
 		//{
 		//writeByte(i);
 		//}
-		writeByte(0xCC);
+		dataWrite(0xFD);
 		sleep(500);
-		writeByte(0x33);
+		dataWrite(0x7F);
 		sleep(500);
 	}
 }
