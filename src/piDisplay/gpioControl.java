@@ -80,6 +80,22 @@ public static void writePin (int [] gpioChannel, String status) {
  	}
 }
 
+
+//Variable setting for device path
+private static String getDevicePath(int pinNumber) {
+	   return String.format(devicePath, pinNumber);
+}
+
+//Variable setting for direction path
+private static String getDirectionPath(int pinNumber) {
+	   return String.format(directionPath, pinNumber);
+}
+
+//Variable setting for value path
+private static String getValuePath(int pinNumber) {
+	   return String.format(valuePath, pinNumber);
+}
+
 /*
 TODO Temporarily pulled out read code, to be replaced after testing
 public static int readPin(int channel[]) {
@@ -127,20 +143,5 @@ public static int readPin(int singleChannel) {
 	  return singlePinData;	  
 }
 */
-
-//Variable setting for device path
-private static String getDevicePath(int pinNumber) {
-	   return String.format(devicePath, pinNumber);
-}
-
-//Variable setting for direction path
-private static String getDirectionPath(int pinNumber) {
-	   return String.format(directionPath, pinNumber);
-}
-
-//Variable setting for value path
-private static String getValuePath(int pinNumber) {
-	   return String.format(valuePath, pinNumber);
-}
 
 }

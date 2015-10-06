@@ -10,9 +10,13 @@ public class LCDDriver {
 	private static final String gpioIn = "in";
 	*/
 	private static final int backlightLED = 24;
+	// Central port 8 (array 1) for readWrite not currently used
 	private static final int [] controlChannel = {25,8,7};
 	private static final int RS = 2;
+	/*
+	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	private static final int readWrite = 1;
+	*/
 	private static final int enable = 0;
 	private static final int[] dataChannel = {23,18,22,21,15,14,17,4};
 	/*
@@ -53,14 +57,6 @@ public static void initialiseLCD () {
 	dataWrite(fontTable.convertChar("e"));
 	sleep(250);
 	dataWrite(fontTable.convertChar("r"));
-	/* dataWrite("r");
-	 * dataWrite("o");
-	 * dataWrite("s");
-	 * dataWrite("P");
-	 * dataWrite("e");
-	 * dataWrite("r");
-	 * dataWrite("!");
-	 */
 }
 	
 public static void backlightControl (String backlightStatus) {
@@ -73,7 +69,10 @@ private static void commandWrite(Integer command) {
 	sleep(0);
 	//}
 	gpioControl.writePin (controlChannel[RS], gpioLow);
+	/*
+	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	*/
 	sleep(500);
 	writeByte(command);
 	sleep(500);
@@ -88,7 +87,10 @@ private static void dataWrite(Integer data) {
 	sleep(0);
 	// }
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
+	/*
+	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	*/
 	sleep(500);
 	writeByte(data);
 	sleep(500);
@@ -96,61 +98,6 @@ private static void dataWrite(Integer data) {
 	sleep(500);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
-
-// This method is just test code for now
-public static void updateLCD(String LCDStatus) {
-	if (LCDStatus.matches("On") ) {
-		gpioControl.writePin (controlChannel[RS], gpioHigh);
-// TODO Check this line, does read instead of write
-		gpioControl.writePin (controlChannel[readWrite], gpioHigh);
-		gpioControl.writePin (controlChannel[enable], gpioHigh);
-		} 
-	else {
-		gpioControl.writePin (controlChannel[RS], gpioLow);
-		gpioControl.writePin (controlChannel[readWrite], gpioLow);
-		gpioControl.writePin (controlChannel[enable], gpioLow);
-		gpioControl.writePin (dataChannel, gpioLow);
-	}
-}  
-
-// Test code to be removed later
-public static void testByteWrite(String testLEDStatus) {
-	// System.out.println( "testLEDStatus is: " + testLEDStatus );
-	if (testLEDStatus.matches("1") ) {
-		//for (int i =255; i>-1; i--)
-		//{
-		//writeByte(i);	
-		//}
-		writeByte(0xAA);
-		sleep(500);
-		writeByte(0x55);
-		sleep(500);
-	} 
-	else {
-		//for (int i=0; i<256; i++)
-		//{
-		//writeByte(i);
-		//}
-		writeByte(0xCC);
-		sleep(500);
-		writeByte(0x33);
-		sleep(500);
-	}
-}
-
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
-// TODO Possibly remove later
-public static int testByteRead() {
-	gpioControl.initialiseGpio (dataChannel, gpioIn);
-	// int dataByte = gpioControl.readPin(dataChannel[busyFlagPin]);
-	// Array read version
-	int dataByte = gpioControl.readPin(dataChannel);
-	// Single pin read version
-	gpioControl.initialiseGpio(dataChannel, gpioOut);
-	return dataByte;
-}
-*/
 
 private static void writeByte (int Byte) {
 	// Check within a single byte range
@@ -186,6 +133,74 @@ private static void writeByte (int Byte) {
 		}
 	}
 }
+
+private static void sleep(int i) {
+	try {
+	Thread.sleep(i);
+	}
+	catch (InterruptedException exception) {
+		exception.printStackTrace();
+	}
+}
+
+//Test code to be removed later
+public static void testByteWrite(String testLEDStatus) {
+	// System.out.println( "testLEDStatus is: " + testLEDStatus );
+	if (testLEDStatus.matches("1") ) {
+		//for (int i =255; i>-1; i--)
+		//{
+		//writeByte(i);	
+		//}
+		writeByte(0xAA);
+		sleep(500);
+		writeByte(0x55);
+		sleep(500);
+	} 
+	else {
+		//for (int i=0; i<256; i++)
+		//{
+		//writeByte(i);
+		//}
+		writeByte(0xCC);
+		sleep(500);
+		writeByte(0x33);
+		sleep(500);
+	}
+}
+
+/*
+TODO Temporarily pulled out read code, to be replaced after testing
+// This method is just test code for now
+public static void updateLCD(String LCDStatus) {
+	if (LCDStatus.matches("On") ) {
+		gpioControl.writePin (controlChannel[RS], gpioHigh);
+// TODO Check this line, does read instead of write
+		gpioControl.writePin (controlChannel[readWrite], gpioHigh);
+		gpioControl.writePin (controlChannel[enable], gpioHigh);
+		} 
+	else {
+		gpioControl.writePin (controlChannel[RS], gpioLow);
+		gpioControl.writePin (controlChannel[readWrite], gpioLow);
+		gpioControl.writePin (controlChannel[enable], gpioLow);
+		gpioControl.writePin (dataChannel, gpioLow);
+	}
+}  
+*/
+
+/*
+TODO Temporarily pulled out read code, to be replaced after testing
+// TODO Possibly remove later
+public static int testByteRead() {
+	gpioControl.initialiseGpio (dataChannel, gpioIn);
+	// int dataByte = gpioControl.readPin(dataChannel[busyFlagPin]);
+	// Array read version
+	int dataByte = gpioControl.readPin(dataChannel);
+	// Single pin read version
+	gpioControl.initialiseGpio(dataChannel, gpioOut);
+	return dataByte;
+}
+*/
+
 /*
 TODO Temporarily pulled out read code, to be replaced after testing
 // TODO change back to private once tested
@@ -206,9 +221,7 @@ public static Boolean busyFlagCheck() {
 	}
 	return busyFlag;
 }
-
 */
-
 
 /*
 // TODO Possibly remove this after testing
@@ -244,12 +257,4 @@ private void dataRead(Integer data) {
 }
 */
 
-    private static void sleep(int i) {
-    	try {
-    	Thread.sleep(i);
-    	}
-    	catch (InterruptedException exception) {
-    		exception.printStackTrace();
-    	}
-    }
 }

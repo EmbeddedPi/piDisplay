@@ -106,15 +106,15 @@ public final class Main extends JavaPlugin implements Listener {
 			testLEDStatus= "0";
 		}
 		LCDDriver.testByteWrite (testLEDStatus);
-		// TODO Test code to read and display data LED status
-    	// int testByte = LCDDriver.testByteRead();
-    	// Test line 
-    	// getLogger().info("Busy flag check is " + LCDDriver.busyFlagCheck());    	
-    	// getLogger().info("Byte just read is " + testByte);
-    	// getLogger().info("Busy flag check is " + LCDDriver.busyFlagCheck());
-    }
-    // End of test code to be removed once LCD driver is working
-    
+		/* TODO Test code to read and display data LED status
+    	int testByte = LCDDriver.testByteRead();
+    	Test line 
+    	getLogger().info("Busy flag check is " + LCDDriver.busyFlagCheck());    	
+    	getLogger().info("Byte just read is " + testByte);
+    	getLogger().info("Busy flag check is " + LCDDriver.busyFlagCheck());
+		End of test code to be removed once LCD driver is working
+		*/
+    } 
     // Determine player location
     private void isLocal() {
     	// Set local variables and count
