@@ -63,7 +63,7 @@ public static void backlightControl (String backlightStatus) {
 	gpioControl.writePin (backlightLED, backlightStatus);
 }
 
-private static void commandWrite(Integer command) {
+public static void commandWrite(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	//while (busyFlagCheck()==true) {
 	sleep(0);
@@ -81,7 +81,7 @@ private static void commandWrite(Integer command) {
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-private static void dataWrite(Integer data) {
+public static void dataWrite(Integer data) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	// while (busyFlagCheck()==true) {
 	sleep(0);

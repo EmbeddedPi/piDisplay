@@ -48,6 +48,13 @@ public final class Main extends JavaPlugin implements Listener {
     	// TODO Clear LCD
     	// LCDStatus = "Off";
     	// Switch off backlight
+    	LCDDriver.dataWrite(fontTable.convertChar("B"));
+    	LCDDriver.dataWrite(fontTable.convertChar("y"));
+    	LCDDriver.dataWrite(fontTable.convertChar("e"));
+    	// Clear display
+    	LCDDriver.commandWrite(0x01);
+    	// Switch off display
+    	LCDDriver.commandWrite(0x0A);    	
     	LCDDriver.backlightControl (LEDOff);
     	// Switch off power LED
     	gpioControl.writePin (powerLED, LEDOff);
