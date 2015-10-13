@@ -28,34 +28,24 @@ public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
 	gpioControl.initialiseGpio (controlChannel, gpioOut);
 	gpioControl.initialiseGpio (dataChannel, gpioOut);
-	backlightControl(gpioHigh);
+	backlightControl(gpioLow);
 	sleep(0);
 	// Initialisation code
 	// Function set : 8 bit interface, 2 display lines, 5x8 font
 	commandWrite(0x38);
-	sleep(500);
 	// Entry mode set :Increment auto, display shift off
 	commandWrite(0x06);
-	sleep(500);
 	// Display control : display on, cursor on, no blinking
-	commandWrite(0x0E);
-	sleep(500);
+	commandWrite(0x0E);;
 	// Clear display, set cursor position to zero
 	commandWrite(0x01);
-	sleep(500);
 	// Test line
 	dataWrite(fontTable.convertChar("P"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("r"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("o"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("s"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("p"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("e"));
-	sleep(250);
 	dataWrite(fontTable.convertChar("r"));
 }
 	
@@ -121,9 +111,9 @@ private static void writeByte (int Byte) {
 	 * }
 	 */
 	// Just checking stuff
-	System.out.println("Final binary is " + binary);
-	int testInt = Integer.parseInt(binary, 2);
-	System.out.println("Final hex is " + Integer.toHexString(testInt));
+	// System.out.println("Final binary is " + binary);
+	// int testInt = Integer.parseInt(binary, 2);
+	// System.out.println("Final hex is " + Integer.toHexString(testInt));
 	for (int i = 0; i<8; i++){
 		if (binary.charAt(i) == '1') {
 			gpioControl.writePin(dataChannel[(7-i)], gpioHigh);
@@ -151,9 +141,11 @@ public static void testByteWrite(String testLEDStatus) {
 		//{
 		//writeByte(i);	
 		//}
-		dataWrite(0xAA);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xCA));
+		dataWrite(0xCA);
 		sleep(500);
-		dataWrite(0x10);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xDE));
+		dataWrite(0xDE);
 		sleep(500);
 	} 
 	else {
@@ -161,9 +153,11 @@ public static void testByteWrite(String testLEDStatus) {
 		//{
 		//writeByte(i);
 		//}
-		dataWrite(0xFD);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
+		dataWrite(0xC5);
 		sleep(500);
-		dataWrite(0x7F);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
+		dataWrite(0xC5);
 		sleep(500);
 	}
 }

@@ -25,9 +25,12 @@ public final class Main extends JavaPlugin implements Listener {
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
+	// Backlight LED is active low.
+	private static final String backlightOn = "0";
+	private static final String backlightOff = "1";
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
-	String testLEDStatus = "1";
+	String testLEDStatus = "0";
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
@@ -55,7 +58,7 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.commandWrite(0x01);
     	// Switch off display
     	LCDDriver.commandWrite(0x0A);    	
-    	LCDDriver.backlightControl (LEDOff);
+    	LCDDriver.backlightControl (backlightOff);
     	// Switch off power LED
     	gpioControl.writePin (powerLED, LEDOff);
     	getLogger().info("piDisplay has switched off");
@@ -72,7 +75,7 @@ public final class Main extends JavaPlugin implements Listener {
     	// TODO check playerArray as currently just handles one player
     	// LCDStatus = "On";
     	// LCDDriver.updateLCD(LCDStatus);
-    	LCDDriver.backlightControl (LEDOn);
+    	LCDDriver.backlightControl (backlightOn);
         // The following lines are for test purposes only"
     	debugMessage();
     }
@@ -90,7 +93,12 @@ public final class Main extends JavaPlugin implements Listener {
     	// Turn the lights off when you leave!
     	// LCDStatus = "Off";
     	// LCDDriver.updateLCD(LCDStatus);
-    	LCDDriver.backlightControl (LEDOff);
+    	LCDDriver.dataWrite(fontTable.convertChar("O"));
+    	LCDDriver.dataWrite(fontTable.convertChar("u"));
+    	LCDDriver.dataWrite(fontTable.convertChar("t"));
+    	LCDDriver.dataWrite(fontTable.convertChar("!"));
+    	// Switch this line back on after testing
+    	// LCDDriver.backlightControl (backlightOff);
     	// The following lines are for test purposes only
     	debugMessage();
     }
