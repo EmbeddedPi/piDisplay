@@ -56,36 +56,36 @@ public static void backlightControl (String backlightStatus) {
 public static void commandWrite(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	//while (busyFlagCheck()==true) {
-	sleep(0);
+	//sleep(0);
 	//}
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	/*
 	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
 	*/
-	sleep(500);
+	sleep(10);
 	writeByte(command);
-	sleep(500);
+	sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	sleep(500);
+	sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
 public static void dataWrite(Integer data) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	// while (busyFlagCheck()==true) {
-	sleep(0);
+	//sleep(0);
 	// }
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
 	/*
 	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
 	*/
-	sleep(500);
+	sleep(10);
 	writeByte(data);
-	sleep(500);
+	sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	sleep(500);
+	sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
@@ -135,30 +135,35 @@ private static void sleep(int i) {
 
 //Test code to be removed later
 public static void testByteWrite(String testLEDStatus) {
-	// System.out.println( "testLEDStatus is: " + testLEDStatus );
 	if (testLEDStatus.matches("1") ) {
-		//for (int i =255; i>-1; i--)
-		//{
-		//writeByte(i);	
-		//}
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xCA));
 		dataWrite(0xCA);
-		sleep(500);
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xDE));
 		dataWrite(0xDE);
-		sleep(500);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
+		dataWrite(0xC5);
+		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
+		dataWrite(0xC5);
 	} 
 	else {
-		//for (int i=0; i<256; i++)
-		//{
-		//writeByte(i);
-		//}
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
-		dataWrite(0xC5);
-		sleep(500);
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
-		dataWrite(0xC5);
-		sleep(500);
+		// Clear display, set cursor position to zero
+		for (int j=0; j<16; j++)
+		{
+		commandWrite(0x01);
+		for (int i=0; i<16; i++)
+			{
+			int pos = (i +16*j);
+			System.out.println( "LCD test char is: " + pos);
+			dataWrite(pos);
+			}
+		sleep(1000);
+		}
+		commandWrite(0x01);
+		for (int i=0; i<16; i++)
+		{
+		System.out.println( "LCD test char is: " + i);
+		dataWrite(i);
+		}
 	}
 }
 
@@ -179,10 +184,7 @@ public static void updateLCD(String LCDStatus) {
 		gpioControl.writePin (dataChannel, gpioLow);
 	}
 }  
-*/
 
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
 // TODO Possibly remove later
 public static int testByteRead() {
 	gpioControl.initialiseGpio (dataChannel, gpioIn);
@@ -193,10 +195,7 @@ public static int testByteRead() {
 	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }
-*/
 
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
 // TODO change back to private once tested
 public static Boolean busyFlagCheck() {
 	// Assume busy by default
@@ -215,9 +214,7 @@ public static Boolean busyFlagCheck() {
 	}
 	return busyFlag;
 }
-*/
 
-/*
 // TODO Possibly remove this after testing
 private integer commandRead(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
