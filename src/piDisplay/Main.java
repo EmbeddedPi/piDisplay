@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private static final String backlightOff = "1";
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
-	String testLEDStatus = "0";
+	int testLCDStatus = 0;
 	// End of test code to be removed once LCD driver is working
 	
 	@Override
@@ -114,13 +114,15 @@ public final class Main extends JavaPlugin implements Listener {
 		player.sendMessage("You placed a block with ID : " + mat);
 		// TODO add test code utilising block material
 		// SAND, DIRT
-		if (testLEDStatus.matches("0")) {
-			testLEDStatus= "1";
-		}
+		
+		LCDDriver.testByteWrite (testLCDStatus);
+		if (testLCDStatus == 4) 
+		{
+			testLCDStatus = 1;
+			} 
 		else {
-			testLEDStatus= "0";
+			testLCDStatus++;
 		}
-		LCDDriver.testByteWrite (testLEDStatus);
 		/* TODO Test code to read and display data LED status
     	int testByte = LCDDriver.testByteRead();
     	Test line 

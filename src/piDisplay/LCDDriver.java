@@ -47,6 +47,8 @@ public static void initialiseLCD () {
 	dataWrite(fontTable.convertChar("p"));
 	dataWrite(fontTable.convertChar("e"));
 	dataWrite(fontTable.convertChar("r"));
+	// Switch cursor to start of line 2
+	commandWrite(0xC0);
 }
 	
 public static void backlightControl (String backlightStatus) {
@@ -134,8 +136,8 @@ private static void sleep(int i) {
 }
 
 //Test code to be removed later
-public static void testByteWrite(String testLEDStatus) {
-	if (testLEDStatus.matches("1") ) {
+public static void testByteWrite(int testLCDStatus) {
+	if (testLCDStatus == 0) {
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xCA));
 		dataWrite(0xCA);
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xDE));
@@ -143,27 +145,111 @@ public static void testByteWrite(String testLEDStatus) {
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
 		dataWrite(0xC5);
 		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
-		dataWrite(0xC5);
+		dataWrite(0xC5);	
 	} 
-	else {
-		// Clear display, set cursor position to zero
-		for (int j=0; j<16; j++)
-		{
+	else if (testLCDStatus == 1) {
+		// clear display
 		commandWrite(0x01);
-		for (int i=0; i<16; i++)
-			{
-			int pos = (i +16*j);
-			System.out.println( "LCD test char is: " + pos);
-			dataWrite(pos);
-			}
-		sleep(1000);
-		}
+		// Set cursor to position at start of line 1
+		commandWrite(0x80);
+		dataWrite(0xCA);
+		dataWrite(0xDE);
+		dataWrite(0xC5);
+		dataWrite(0xC5);
+		// Set cursor to position at start of line 2
+		commandWrite(0xC0);
+		dataWrite(fontTable.convertChar("D"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("v"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("i"));
+		dataWrite(fontTable.convertChar("s"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("g"));
+		dataWrite(fontTable.convertChar("r"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("t"));
+		dataWrite(fontTable.convertChar("!"));
+	}
+	else if (testLCDStatus == 2) {
+		// clear display
 		commandWrite(0x01);
-		for (int i=0; i<16; i++)
-		{
-		System.out.println( "LCD test char is: " + i);
-		dataWrite(i);
-		}
+		// Set cursor to position at start of line 1
+		commandWrite(0x80);
+		dataWrite(fontTable.convertChar("D"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("v"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("i"));
+		dataWrite(fontTable.convertChar("s"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("g"));
+		dataWrite(fontTable.convertChar("r"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("t"));
+		dataWrite(fontTable.convertChar("!"));
+		// Set cursor to position at start of line 2
+		commandWrite(0xC0);
+		dataWrite(0xCA);
+		dataWrite(0xDE);
+		dataWrite(0xC5);
+		dataWrite(0xC5);
+	}
+	else if (testLCDStatus == 3) {
+		// clear display
+		commandWrite(0x01);
+		// Set cursor to position at start of line 1
+		commandWrite(0x80);
+		dataWrite(0xCA);
+		dataWrite(0xDE);
+		dataWrite(0xC5);
+		dataWrite(0xC5);
+		// Set cursor to position at start of line 2
+		commandWrite(0xC0);
+		dataWrite(fontTable.convertChar("J"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("n"));
+		dataWrite(fontTable.convertChar("n"));
+		dataWrite(fontTable.convertChar("i"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("s"));
+		dataWrite(fontTable.convertChar("m"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("l"));
+		dataWrite(fontTable.convertChar("l"));
+		dataWrite(fontTable.convertChar("s"));
+	}
+	else if (testLCDStatus == 4) {
+		// clear display
+		commandWrite(0x01);
+		// Set cursor to position at start of line 1
+		commandWrite(0x80);
+		dataWrite(fontTable.convertChar("J"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("a"));
+		dataWrite(fontTable.convertChar("n"));
+		dataWrite(fontTable.convertChar("n"));
+		dataWrite(fontTable.convertChar("i"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar(" "));
+		dataWrite(fontTable.convertChar("s"));
+		dataWrite(fontTable.convertChar("m"));
+		dataWrite(fontTable.convertChar("e"));
+		dataWrite(fontTable.convertChar("l"));
+		dataWrite(fontTable.convertChar("l"));
+		dataWrite(fontTable.convertChar("s"));
+		// Set cursor to position at start of line 2
+		commandWrite(0xC0);
+		dataWrite(0xCA);
+		dataWrite(0xDE);
+		dataWrite(0xC5);
+		dataWrite(0xC5);
 	}
 }
 
