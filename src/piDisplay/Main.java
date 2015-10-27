@@ -51,6 +51,8 @@ public final class Main extends JavaPlugin implements Listener {
     	// TODO Clear LCD
     	// LCDStatus = "Off";
     	// Switch off backlight
+    	// Clear display
+    	LCDDriver.commandWrite(0x01);
     	LCDDriver.dataWrite(fontTable.convertChar("B"));
     	LCDDriver.dataWrite(fontTable.convertChar("y"));
     	LCDDriver.dataWrite(fontTable.convertChar("e"));
@@ -76,6 +78,10 @@ public final class Main extends JavaPlugin implements Listener {
     	// LCDStatus = "On";
     	// LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (backlightOn);
+    	LCDDriver.clearLine(1);
+    	LCDDriver.writeString(recentPlayer);
+    	LCDDriver.clearLine(2);
+    	LCDDriver.writeString("has arrived!");
         // The following lines are for test purposes only"
     	debugMessage();
     }
@@ -93,10 +99,10 @@ public final class Main extends JavaPlugin implements Listener {
     	// Turn the lights off when you leave!
     	// LCDStatus = "Off";
     	// LCDDriver.updateLCD(LCDStatus);
-    	LCDDriver.dataWrite(fontTable.convertChar("O"));
-    	LCDDriver.dataWrite(fontTable.convertChar("u"));
-    	LCDDriver.dataWrite(fontTable.convertChar("t"));
-    	LCDDriver.dataWrite(fontTable.convertChar("!"));
+    	LCDDriver.clearLine(1);
+    	LCDDriver.writeString(recentPlayer);
+    	LCDDriver.clearLine(2);
+    	LCDDriver.writeString("has gone home!");
     	// Switch this line back on after testing
     	// LCDDriver.backlightControl (backlightOff);
     	// The following lines are for test purposes only

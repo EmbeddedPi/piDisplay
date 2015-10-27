@@ -2,6 +2,8 @@ package piDisplay;
 
 public class LCDDriver {
 	
+	private static final int lineLength = 16;
+	private static final int space = 0x20;
 	private static final String gpioHigh = "1";
 	private static final String gpioLow = "0";
 	private static final String gpioOut = "out";
@@ -65,11 +67,11 @@ public static void commandWrite(Integer command) {
 	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
 	*/
-	sleep(10);
+	// sleep(10);
 	writeByte(command);
-	sleep(10);
+	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	sleep(10);
+	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
@@ -83,11 +85,11 @@ public static void dataWrite(Integer data) {
 	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
 	*/
-	sleep(10);
+	// sleep(10);
 	writeByte(data);
-	sleep(10);
+	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	sleep(10);
+	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
@@ -125,6 +127,23 @@ private static void writeByte (int Byte) {
 		}
 	}
 }
+public static void writeString(String textString) {
+	for (int i = 0; i<lineLength; i++) {
+		dataWrite(fontTable.convertChar(String.valueOf(textString.charAt(i))));
+	}
+}
+
+public static void clearLine(int line) {
+	System.out.println( "Line before sum is : " + line);
+	commandWrite(0x80 + (--line) * 0x40);
+	System.out.println( "Line after sum is: " + line);
+	System.out.println( "Line Command is : " + (0x80 + (line * 0x40)));
+	for (int i =0; i<lineLength; i++) {
+		dataWrite(space);
+	}
+	// Reset cursor to start of line
+	commandWrite(0x80 + (line) * 0x40);
+}
 
 private static void sleep(int i) {
 	try {
@@ -148,16 +167,12 @@ public static void testByteWrite(int testLCDStatus) {
 		dataWrite(0xC5);	
 	} 
 	else if (testLCDStatus == 1) {
-		// clear display
-		commandWrite(0x01);
-		// Set cursor to position at start of line 1
-		commandWrite(0x80);
+		clearLine(1);
 		dataWrite(0xCA);
 		dataWrite(0xDE);
 		dataWrite(0xC5);
 		dataWrite(0xC5);
-		// Set cursor to position at start of line 2
-		commandWrite(0xC0);
+		clearLine(2);
 		dataWrite(fontTable.convertChar("D"));
 		dataWrite(fontTable.convertChar("a"));
 		dataWrite(fontTable.convertChar("v"));
@@ -174,10 +189,7 @@ public static void testByteWrite(int testLCDStatus) {
 		dataWrite(fontTable.convertChar("!"));
 	}
 	else if (testLCDStatus == 2) {
-		// clear display
-		commandWrite(0x01);
-		// Set cursor to position at start of line 1
-		commandWrite(0x80);
+		clearLine(1);
 		dataWrite(fontTable.convertChar("D"));
 		dataWrite(fontTable.convertChar("a"));
 		dataWrite(fontTable.convertChar("v"));
@@ -192,24 +204,19 @@ public static void testByteWrite(int testLCDStatus) {
 		dataWrite(fontTable.convertChar("a"));
 		dataWrite(fontTable.convertChar("t"));
 		dataWrite(fontTable.convertChar("!"));
-		// Set cursor to position at start of line 2
-		commandWrite(0xC0);
+		clearLine(2);
 		dataWrite(0xCA);
 		dataWrite(0xDE);
 		dataWrite(0xC5);
 		dataWrite(0xC5);
 	}
 	else if (testLCDStatus == 3) {
-		// clear display
-		commandWrite(0x01);
-		// Set cursor to position at start of line 1
-		commandWrite(0x80);
+		clearLine(1);
 		dataWrite(0xCA);
 		dataWrite(0xDE);
 		dataWrite(0xC5);
 		dataWrite(0xC5);
-		// Set cursor to position at start of line 2
-		commandWrite(0xC0);
+		clearLine(2);
 		dataWrite(fontTable.convertChar("J"));
 		dataWrite(fontTable.convertChar("e"));
 		dataWrite(fontTable.convertChar("a"));
@@ -226,10 +233,7 @@ public static void testByteWrite(int testLCDStatus) {
 		dataWrite(fontTable.convertChar("s"));
 	}
 	else if (testLCDStatus == 4) {
-		// clear display
-		commandWrite(0x01);
-		// Set cursor to position at start of line 1
-		commandWrite(0x80);
+		clearLine(1);
 		dataWrite(fontTable.convertChar("J"));
 		dataWrite(fontTable.convertChar("e"));
 		dataWrite(fontTable.convertChar("a"));
@@ -244,8 +248,7 @@ public static void testByteWrite(int testLCDStatus) {
 		dataWrite(fontTable.convertChar("l"));
 		dataWrite(fontTable.convertChar("l"));
 		dataWrite(fontTable.convertChar("s"));
-		// Set cursor to position at start of line 2
-		commandWrite(0xC0);
+		clearLine(2);
 		dataWrite(0xCA);
 		dataWrite(0xDE);
 		dataWrite(0xC5);
