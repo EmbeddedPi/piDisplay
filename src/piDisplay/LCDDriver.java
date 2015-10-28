@@ -42,15 +42,20 @@ public static void initialiseLCD () {
 	// Clear display, set cursor position to zero
 	commandWrite(0x01);
 	// Test line
-	dataWrite(fontTable.convertChar("P"));
-	dataWrite(fontTable.convertChar("r"));
-	dataWrite(fontTable.convertChar("o"));
+	dataWrite(fontTable.convertChar("I"));
+	dataWrite(fontTable.convertChar("n"));
+	dataWrite(fontTable.convertChar("i"));
+	dataWrite(fontTable.convertChar("t"));
+	dataWrite(fontTable.convertChar("i"));
+	dataWrite(fontTable.convertChar("a"));
+	dataWrite(fontTable.convertChar("l"));
+	dataWrite(fontTable.convertChar("i"));
 	dataWrite(fontTable.convertChar("s"));
-	dataWrite(fontTable.convertChar("p"));
 	dataWrite(fontTable.convertChar("e"));
-	dataWrite(fontTable.convertChar("r"));
+	dataWrite(fontTable.convertChar("d"));
 	// Switch cursor to start of line 2
 	commandWrite(0xC0);
+	writeString ("Prosper is furry");
 }
 	
 public static void backlightControl (String backlightStatus) {
@@ -93,7 +98,7 @@ public static void dataWrite(Integer data) {
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-private static void writeByte (int Byte) {
+public static void writeByte (int Byte) {
 	// Check within a single byte range
 	if (Byte<0 | Byte>255) {
 		System.out.println(Byte + "isn't in range 0~255");
@@ -118,7 +123,7 @@ private static void writeByte (int Byte) {
 	// System.out.println("Final binary is " + binary);
 	// int testInt = Integer.parseInt(binary, 2);
 	// System.out.println("Final hex is " + Integer.toHexString(testInt));
-	for (int i = 0; i<8; i++){
+	for (int i = 0; i<8; i++) {
 		if (binary.charAt(i) == '1') {
 			gpioControl.writePin(dataChannel[(7-i)], gpioHigh);
 		}
@@ -134,10 +139,8 @@ public static void writeString(String textString) {
 }
 
 public static void clearLine(int line) {
-	System.out.println( "Line before sum is : " + line);
+	// set cursor to start of required line
 	commandWrite(0x80 + (--line) * 0x40);
-	System.out.println( "Line after sum is: " + line);
-	System.out.println( "Line Command is : " + (0x80 + (line * 0x40)));
 	for (int i =0; i<lineLength; i++) {
 		dataWrite(space);
 	}
@@ -151,108 +154,6 @@ private static void sleep(int i) {
 	}
 	catch (InterruptedException exception) {
 		exception.printStackTrace();
-	}
-}
-
-//Test code to be removed later
-public static void testByteWrite(int testLCDStatus) {
-	if (testLCDStatus == 0) {
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xCA));
-		dataWrite(0xCA);
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xDE));
-		dataWrite(0xDE);
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
-		dataWrite(0xC5);
-		System.out.println( "LCD test char is: " + Integer.toHexString(0xC5));
-		dataWrite(0xC5);	
-	} 
-	else if (testLCDStatus == 1) {
-		clearLine(1);
-		dataWrite(0xCA);
-		dataWrite(0xDE);
-		dataWrite(0xC5);
-		dataWrite(0xC5);
-		clearLine(2);
-		dataWrite(fontTable.convertChar("D"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("v"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("i"));
-		dataWrite(fontTable.convertChar("s"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("g"));
-		dataWrite(fontTable.convertChar("r"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("t"));
-		dataWrite(fontTable.convertChar("!"));
-	}
-	else if (testLCDStatus == 2) {
-		clearLine(1);
-		dataWrite(fontTable.convertChar("D"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("v"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("i"));
-		dataWrite(fontTable.convertChar("s"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("g"));
-		dataWrite(fontTable.convertChar("r"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("t"));
-		dataWrite(fontTable.convertChar("!"));
-		clearLine(2);
-		dataWrite(0xCA);
-		dataWrite(0xDE);
-		dataWrite(0xC5);
-		dataWrite(0xC5);
-	}
-	else if (testLCDStatus == 3) {
-		clearLine(1);
-		dataWrite(0xCA);
-		dataWrite(0xDE);
-		dataWrite(0xC5);
-		dataWrite(0xC5);
-		clearLine(2);
-		dataWrite(fontTable.convertChar("J"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("n"));
-		dataWrite(fontTable.convertChar("n"));
-		dataWrite(fontTable.convertChar("i"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("s"));
-		dataWrite(fontTable.convertChar("m"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("l"));
-		dataWrite(fontTable.convertChar("l"));
-		dataWrite(fontTable.convertChar("s"));
-	}
-	else if (testLCDStatus == 4) {
-		clearLine(1);
-		dataWrite(fontTable.convertChar("J"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("a"));
-		dataWrite(fontTable.convertChar("n"));
-		dataWrite(fontTable.convertChar("n"));
-		dataWrite(fontTable.convertChar("i"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar(" "));
-		dataWrite(fontTable.convertChar("s"));
-		dataWrite(fontTable.convertChar("m"));
-		dataWrite(fontTable.convertChar("e"));
-		dataWrite(fontTable.convertChar("l"));
-		dataWrite(fontTable.convertChar("l"));
-		dataWrite(fontTable.convertChar("s"));
-		clearLine(2);
-		dataWrite(0xCA);
-		dataWrite(0xDE);
-		dataWrite(0xC5);
-		dataWrite(0xC5);
 	}
 }
 

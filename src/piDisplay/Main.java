@@ -44,6 +44,10 @@ public final class Main extends JavaPlugin implements Listener {
 		gpioControl.writePin (powerLED, LEDOn);
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piDisplay is ready to display stuff"); 
+		// LCDDriver.clearLine(1);
+    	// LCDDriver.writeString("piDisplayHi");
+    	// LCDDriver.clearLine(2);
+    	// LCDDriver.writeString("has started.");
 	}
  
     @Override
@@ -53,9 +57,10 @@ public final class Main extends JavaPlugin implements Listener {
     	// Switch off backlight
     	// Clear display
     	LCDDriver.commandWrite(0x01);
-    	LCDDriver.dataWrite(fontTable.convertChar("B"));
-    	LCDDriver.dataWrite(fontTable.convertChar("y"));
-    	LCDDriver.dataWrite(fontTable.convertChar("e"));
+    	// LCDDriver.clearLine(1);
+    	// LCDDriver.writeString("piDisplayBye");
+    	// LCDDriver.clearLine(2);
+    	// LCDDriver.writeString("left the arena");
     	// Clear display
     	LCDDriver.commandWrite(0x01);
     	// Switch off display
@@ -79,9 +84,9 @@ public final class Main extends JavaPlugin implements Listener {
     	// LCDDriver.updateLCD(LCDStatus);
     	LCDDriver.backlightControl (backlightOn);
     	LCDDriver.clearLine(1);
-    	LCDDriver.writeString(recentPlayer);
+    	LCDDriver.writeString (recentPlayer);
     	LCDDriver.clearLine(2);
-    	LCDDriver.writeString("has arrived!");
+    	LCDDriver.writeString ("has arrived!");
         // The following lines are for test purposes only"
     	debugMessage();
     }
@@ -116,19 +121,11 @@ public final class Main extends JavaPlugin implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		Material mat = block.getType(); 
-		// Display a message to the player telling them what type of block they placed.
-		player.sendMessage("You placed a block with ID : " + mat);
-		// TODO add test code utilising block material
-		// SAND, DIRT
-		
-		LCDDriver.testByteWrite (testLCDStatus);
-		if (testLCDStatus == 4) 
-		{
-			testLCDStatus = 1;
-			} 
-		else {
-			testLCDStatus++;
-		}
+		// Display a message on screen regarding who placed what.
+		LCDDriver.clearLine(1);
+    	LCDDriver.writeString(player.getName());
+    	LCDDriver.clearLine(2);
+		LCDDriver.writeString("Placed " + mat);
 		/* TODO Test code to read and display data LED status
     	int testByte = LCDDriver.testByteRead();
     	Test line 
