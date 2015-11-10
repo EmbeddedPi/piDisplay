@@ -138,7 +138,16 @@ public final class Main extends JavaPlugin implements Listener {
     // Determine player location
     private void isLocal() {
     	// Set local variables and count
-    	if (recentPlayerIP.startsWith("192.168")) {
+    	if (recentPlayerIP.equals("192.168.1.1")) {
+    		areYouLocal = false;
+			if (recentJoin) {
+				notLocal++;
+			}
+			else {
+			notLocal--;
+			}
+		}    	
+    	else if (recentPlayerIP.startsWith("192.168.1")) {
     		areYouLocal = true;
     		if (recentJoin) {
     			local++;
