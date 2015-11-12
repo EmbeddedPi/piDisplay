@@ -15,10 +15,7 @@ public class LCDDriver {
 	// Central port 8 (array 1) for readWrite not currently used
 	private static final int [] controlChannel = {25,8,7};
 	private static final int RS = 2;
-	/*
-	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	private static final int readWrite = 1;
-	*/
 	private static final int enable = 0;
 	private static final int[] dataChannel = {23,18,22,21,15,14,17,4};
 	/*
@@ -68,10 +65,7 @@ public static void commandWrite(Integer command) {
 	//sleep(0);
 	//}
 	gpioControl.writePin (controlChannel[RS], gpioLow);
-	/*
-	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	*/
 	// sleep(10);
 	writeByte(command);
 	// sleep(10);
@@ -86,10 +80,7 @@ public static void dataWrite(Integer data) {
 	//sleep(0);
 	// }
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
-	/*
-	TODO Temporarily pulled out readWrite code, to be replaced after testing, readWrite pulled to GND
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	*/
 	// sleep(10);
 	writeByte(data);
 	// sleep(10);
