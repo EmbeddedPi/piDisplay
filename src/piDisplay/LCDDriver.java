@@ -38,27 +38,38 @@ public static void initialiseLCD () {
 	commandWrite(0x0E);;
 	// Clear display, set cursor position to zero
 	commandWrite(0x01);
-	// Test line
-	dataWrite(fontTable.convertChar("I"));
-	dataWrite(fontTable.convertChar("n"));
-	dataWrite(fontTable.convertChar("i"));
-	dataWrite(fontTable.convertChar("t"));
-	dataWrite(fontTable.convertChar("i"));
-	dataWrite(fontTable.convertChar("a"));
-	dataWrite(fontTable.convertChar("l"));
-	dataWrite(fontTable.convertChar("i"));
-	dataWrite(fontTable.convertChar("s"));
-	dataWrite(fontTable.convertChar("e"));
-	dataWrite(fontTable.convertChar("d"));
+	// Sets cursor to start of line 1
+	commandWrite(0x80);
+	writeString(">>Initialised.<<");	
 	// Switch cursor to start of line 2
 	commandWrite(0xC0);
-	writeString ("Prosper is furry");
+	writeString ("piDisplay online");
 }
-	
+
+// Backlight control method
 public static void backlightControl (String backlightStatus) {
 	gpioControl.writePin (backlightLED, backlightStatus);
 }
 
+// Method for writing strings to display
+public static void writeString(String textString) {
+	for (int i = 0; i<lineLength; i++) {
+		dataWrite(fontTable.convertChar(String.valueOf(textString.charAt(i))));
+	}
+}
+
+//Method for clear line
+public static void clearLine(int line) {
+	// set cursor to start of required line
+	commandWrite(0x80 + (--line) * 0x40);
+	for (int i =0; i<lineLength; i++) {
+		dataWrite(space);
+	}
+	// Reset cursor to start of line
+	commandWrite(0x80 + (line) * 0x40);
+}
+
+//Method for writing commands to display
 public static void commandWrite(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	//while (busyFlagCheck()==true) {
@@ -66,30 +77,24 @@ public static void commandWrite(Integer command) {
 	//}
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	// sleep(10);
 	writeByte(command);
-	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-public static void dataWrite(Integer data) {
+private static void dataWrite(Integer data) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	// while (busyFlagCheck()==true) {
 	//sleep(0);
 	// }
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	// sleep(10);
 	writeByte(data);
-	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
-	// sleep(10);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-public static void writeByte (int Byte) {
+private static void writeByte (int Byte) {
 	// Check within a single byte range
 	if (Byte<0 | Byte>255) {
 		System.out.println(Byte + "isn't in range 0~255");
@@ -123,21 +128,7 @@ public static void writeByte (int Byte) {
 		}
 	}
 }
-public static void writeString(String textString) {
-	for (int i = 0; i<lineLength; i++) {
-		dataWrite(fontTable.convertChar(String.valueOf(textString.charAt(i))));
-	}
-}
 
-public static void clearLine(int line) {
-	// set cursor to start of required line
-	commandWrite(0x80 + (--line) * 0x40);
-	for (int i =0; i<lineLength; i++) {
-		dataWrite(space);
-	}
-	// Reset cursor to start of line
-	commandWrite(0x80 + (line) * 0x40);
-}
 
 private static void sleep(int i) {
 	try {

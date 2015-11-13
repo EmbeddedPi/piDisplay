@@ -3,10 +3,10 @@ package piDisplay;
 public class fontTable {
 	
 	public static int convertChar (String fontChar){
-		int fontCode = 0x55;
+		int fontCode = 0x3F;
 		// TODO Fill this little lot in
 		switch (fontChar) {
-		/* 
+		/* CGRAM codes
 		case "?0":	fontCode = 0x00;
 					break;
 		case "?1":	fontCode = 0x01;
@@ -40,6 +40,7 @@ public class fontTable {
 		case "?F":	fontCode = 0x0F;
 					break;	
 		*/
+// Remove after testing as not used in Minecraft
 		case " ": 	fontCode = 0x20;
 					break;
 		case "!": 	fontCode = 0x21;
@@ -68,10 +69,12 @@ public class fontTable {
 					break;
 		case "-": 	fontCode = 0x2D;
 					break;
+// To keep after testing					
 		case ".": 	fontCode = 0x2E;
 					break;
 		case "/": 	fontCode = 0x2F;
-					break;
+					break;				
+// To keep after testing
 		case "0": 	fontCode = 0x30;
 					break;
 		case "1": 	fontCode = 0x31;
@@ -92,20 +95,25 @@ public class fontTable {
 					break;			
 		case "9": 	fontCode = 0x39;
 					break;
+// Remove after testing as not used in Minecraft
 		case ":": 	fontCode = 0x3A;
 					break;
 		case ";": 	fontCode = 0x3B;
 					break;
+// To keep after testing
 		case "<": 	fontCode = 0x3C;
 					break;
+//Remove after testing as not used in Minecraft
 		case "=": 	fontCode = 0x3D;
 					break;
+// To keep after testing
 		case ">": 	fontCode = 0x3E;
 					break;
 		case "?": 	fontCode = 0x3F;
 					break;
 		case "@": 	fontCode = 0x40;
 					break;
+// To keep after testing
 		case "A": 	fontCode = 0x41;
 					break;
 		case "B": 	fontCode = 0x42;
@@ -158,6 +166,7 @@ public class fontTable {
 					break;
 		case "Z": 	fontCode = 0x5A;
 					break;
+// Remove after testing as not used in Minecraft
 		case "[": 	fontCode = 0x5B;
 					break;
 		case "Yen": fontCode = 0x5C;
@@ -166,10 +175,13 @@ public class fontTable {
 					break;
 		case "^": 	fontCode = 0x5E;
 					break;
+// To keep after testing
 		case "_": 	fontCode = 0x5F;
 					break;
+// Remove after testing as not used in Minecraft
 		case "`": 	fontCode = 0x60;
 					break;
+// To keep after testing		
 		case "a": 	fontCode = 0x61;
 					break;
 		case "b": 	fontCode = 0x62;
@@ -222,6 +234,7 @@ public class fontTable {
 					break;
 		case "z": 	fontCode = 0x7A;
 					break;
+// Remove after testing as not used in Minecraft
 		case "{": 	fontCode = 0x7B;
 					break;
 		case "|": 	fontCode = 0x7C;
@@ -233,8 +246,9 @@ public class fontTable {
 		case "<-": 	fontCode = 0x7F;
 					break;	
 		/*
-		 * Cases from 0xA0 to 0xFF once I know what's on my chips
-		 * and more importantly if I can be bothered.
+		 * Cases from 0xA1 to 0xFF are Japanese font code A00 
+		 * a from HD44780U standard specification.
+		 * To be added if and when I can be bothered.
 		 */
 					
 		default:	fontCode = 0x3F;
