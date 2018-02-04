@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>io.github.EmbeddedPi</groupId>
   	<artifactId>piDisplay</artifactId>
-  	<version>0.0.1</version>
+  	<version>0.1</version>
   	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
@@ -13,24 +13,24 @@
             	<artifactId>maven-compiler-plugin</artifactId>
             	<version>3.1</version>
             	<configuration>
-            		<executable>/opt/jdk1.7.0_60/bin/javac</executable>
-            		<source>1.7</source>
-            		<target>1.7</target>
+            		<executable>/opt/jdk1.8.0_77/bin/javac</executable>
+            		<source>1.8</source>
+            		<target>1.8</target>
             	</configuration>
 			</plugin>
 		</plugins>
  	</build>
  	<repositories>
  		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.bukkit</groupId>
         	<artifactId>bukkit</artifactId>
-        	<version>1.6.4-R2.0</version>
+        	<version>1.9.4-R0.1-SNAPSHOT</version>
         	<type>jar</type>
         	<scope>provided</scope>
 		</dependency>
