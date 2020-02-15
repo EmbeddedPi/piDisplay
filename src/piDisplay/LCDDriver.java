@@ -53,7 +53,12 @@ public static void backlightControl (String backlightStatus) {
 
 // Method for writing strings to display
 public static void writeString(String textString) {
-	for (int i = 0; i<lineLength; i++) {
+	int length = textString.length();
+	//Truncate display if longer than lineLength
+	if (length>lineLength) {
+		length=lineLength;
+	}
+	for (int i = 0; i<length; i++) {
 		dataWrite(fontTable.convertChar(String.valueOf(textString.charAt(i))));
 	}
 }
