@@ -14,9 +14,9 @@ public class LCDDriver {
 	private static final int backlightLED = 22;
 	// Central port 8 (array 1) for readWrite not currently used
 	private static final int [] controlChannel = {11,9,10};
-	private static final int RS = 2;
+	private static final int RS = 0;
 	private static final int readWrite = 1;
-	private static final int enable = 0;
+	private static final int enable = 2;
 	private static final int[] dataChannel = {7,8,25,24,23,18,15,14};
 	/*
 	TODO Temporarily pulled out read code, to be replaced after testing
