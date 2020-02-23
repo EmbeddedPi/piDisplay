@@ -11,13 +11,14 @@ public class LCDDriver {
 	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final String gpioIn = "in";
 	*/
-	private static final int backlightLED = 22;
+	private static final int backlightLED = 24;
 	// Central port 8 (array 1) for readWrite not currently used
-	private static final int [] controlChannel = {11,9,10};
+	private static final int [] controlChannel = {7,8,25};
 	private static final int RS = 0;
 	private static final int readWrite = 1;
 	private static final int enable = 2;
-	private static final int[] dataChannel = {7,8,25,24,23,18,15,14};
+	//private static final int[] dataChannelP = {7,8,25,24,23,18,15,14};
+	private static final int[] dataChannel = {23,18,15,14};
 	/*
 	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final int busyFlagPin = 7;
@@ -31,7 +32,9 @@ public static void initialiseLCD () {
 	sleep(0);
 	// Initialisation code
 	// Function set : 8 bit interface, 2 display lines, 5x8 font
-	commandWrite(0x38);
+	//commandWrite(0x38);
+	// Function set : 4 bit interface, 2 display lines, 5x8 font
+	commandWrite(0x28);
 	// Entry mode set :Increment auto, display shift off
 	commandWrite(0x06);
 	// Display control : display on, cursor on, no blinking
@@ -75,31 +78,66 @@ public static void clearLine(int line) {
 }
 
 //Method for writing commands to display
-public static void commandWrite(Integer command) {
+public static void commandWrite(Integer sendData) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	//while (busyFlagCheck()==true) {
 	//sleep(0);
 	//}
+	String command = checkByte(sendData);
+	String commandMSB = command.substring(0,4);
+	String commandLSB = command.substring(4);
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(command);
+	writeByte(commandMSB);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
+	writeByte(commandLSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-private static void dataWrite(Integer data) {
+private static void dataWrite(Integer sendData) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	// while (busyFlagCheck()==true) {
 	//sleep(0);
 	// }
+	String data = checkByte(sendData);
+	String dataMSB = data.substring(0,4);
+	String dataLSB = data.substring(4);
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(data);
+	writeByte(dataMSB);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
+	writeByte(dataLSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
-private static void writeByte (int Byte) {
+//4 bit interface version
+private static void writeByte (String dataByte) {
+	// TODO Code to confirm busyCheck() == false before continuing
+	/*
+	 * While (busyFlagCheck()) {
+	 * sleep(0)
+	 * }
+	 */
+	// Just checking stuff
+	// System.out.println("Final binary is " + binary);
+	// int testInt = Integer.parseInt(binary, 2);
+	// System.out.println("Final hex is " + Integer.toHexString(testInt));
+	for (int i = 0; i<4; i++) {
+		if (dataByte.charAt(i) == '1') {
+			gpioControl.writePin(dataChannel[(3-i)], gpioHigh);
+		}
+		else {
+			gpioControl.writePin(dataChannel[(3-i)], gpioLow);
+		}
+	}
+}
+
+/*8 bit interface version
+private static void writeByteP (int Byte) {
 	// Check within a single byte range
 	if (Byte<0 | Byte>255) {
 		System.out.println(Byte + "isn't in range 0~255");
@@ -114,24 +152,37 @@ private static void writeByte (int Byte) {
 		}
 		binary = str + binary;
 	}
-	// TODO Code to confirm busyCheck() == false before continuing
-	/*
-	 * While (busyFlagCheck()) {
-	 * sleep(0)
-	 * }
-	 */
+	
 	// Just checking stuff
 	// System.out.println("Final binary is " + binary);
 	// int testInt = Integer.parseInt(binary, 2);
 	// System.out.println("Final hex is " + Integer.toHexString(testInt));
 	for (int i = 0; i<8; i++) {
 		if (binary.charAt(i) == '1') {
-			gpioControl.writePin(dataChannel[(7-i)], gpioHigh);
+			gpioControl.writePin(dataChannelP[(7-i)], gpioHigh);
 		}
 		else {
-			gpioControl.writePin(dataChannel[(7-i)], gpioLow);
+			gpioControl.writePin(dataChannelP[(7-i)], gpioLow);
 		}
 	}
+}
+End of currently unused 8 bit version */
+
+private static String checkByte(int sendData) {
+	if (sendData<0 | sendData>255) {
+		System.out.println(sendData+ "isn't in range 0~255");
+		return "";
+	}
+	String binary = Integer.toBinaryString (sendData);
+	// Fill to 8 bits if less than 128
+	if (binary.length()<8) {
+		String str = "";
+		for (int s=0; s<(8-binary.length()); s++) {
+			str = "0" + str;
+		}
+		binary = str + binary;
+	}
+	return binary;
 }
 
 

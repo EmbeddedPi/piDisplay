@@ -21,7 +21,7 @@ public final class Main extends JavaPlugin implements Listener {
 	private boolean recentJoin = false;
 	private String recentPlayer = "";
 	private String recentPlayerIP = "";
-	private static final int powerLED = 17;
+	private static final int powerLED = 11;
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
