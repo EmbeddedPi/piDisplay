@@ -25,9 +25,8 @@ public final class Main extends JavaPlugin implements Listener {
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
-	// Backlight LED is active low.
-	private static final String backlightOn = "0";
-	private static final String backlightOff = "1";
+	private static final String backlightOn = "1";
+	private static final String backlightOff = "0";
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
 	int testLCDStatus = 0;
@@ -42,6 +41,8 @@ public final class Main extends JavaPlugin implements Listener {
 		LCDDriver.initialiseLCD ();
 		// Switch on power LED
 		gpioControl.writePin (powerLED, LEDOn);
+		//Switch on backlight
+		LCDDriver.backlightControl (backlightOn);
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piDisplay is ready to display stuff"); 
 		// LCDDriver.clearLine(1);
