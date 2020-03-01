@@ -25,8 +25,8 @@ public final class Main extends JavaPlugin implements Listener {
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
-	private static final String backlightOn = "1";
-	private static final String backlightOff = "0";
+	private static final String backlightOn = "0";
+	private static final String backlightOff = "1";
 	private static final String LEDOut = "out";
 	// Test code to be removed once LCD driver is working
 	int testLCDStatus = 0;
