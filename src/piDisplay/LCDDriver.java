@@ -11,14 +11,14 @@ public class LCDDriver {
 	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final String gpioIn = "in";
 	*/
-	private static final int backlightLED = 24;
+	private static final int backlightLED = 14;
 	// Central port 8 (array 1) for readWrite not currently used
-	private static final int [] controlChannel = {7,8,25};
+	private static final int [] controlChannel = {23,18,15};
 	private static final int RS = 0;
 	private static final int readWrite = 1;
 	private static final int enable = 2;
 	//private static final int[] dataChannelP = {7,8,25,24,23,18,15,14};
-	private static final int[] dataChannel = {23,18,15,14};
+	private static final int[] dataChannel = {7,8,25,24};
 	/*
 	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final int busyFlagPin = 7;

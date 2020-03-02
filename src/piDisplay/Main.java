@@ -25,6 +25,7 @@ public final class Main extends JavaPlugin implements Listener {
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
+	//Backlight LED is active low
 	private static final String backlightOn = "0";
 	private static final String backlightOff = "1";
 	private static final String LEDOut = "out";
