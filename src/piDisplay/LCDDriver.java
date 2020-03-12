@@ -11,17 +11,20 @@ public class LCDDriver {
 	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final String gpioIn = "in";
 	*/
-	private static final int backlightLED = 25;
-	// Central port 8 (array 1) for readWrite not currently used
-	private static final int [] controlChannel = {23,7,8};
+	private static final int backlightLED = 15;
+	//Specify pins for control channel in order {RS,R/W,E}
+	private static final int [] controlChannel = {24,14,23};
 	private static final int RS = 0;
+	// Central pin for readWrite not currently used
 	private static final int readWrite = 1;
 	private static final int enable = 2;
 	//private static final int[] dataChannelP = {7,8,25,24,23,18,15,14};
-	private static final int[] dataChannel = {18,15,14,24};
+	//Specify pins for data channel in order {D4,D5,D6,D7}
+	private static final int[] dataChannel = {25,8,7,18};
 	/*
 	TODO Temporarily pulled out read code, to be replaced after testing
-	private static final int busyFlagPin = 7;
+	//Set busy flag to DB7 from control channel
+	private static final int busyFlagPin = dataChannel[3];
 	*/
 
 public static void initialiseLCD () {
