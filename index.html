@@ -29,52 +29,36 @@
 <a id="welcome-to-github-pages" class="anchor" href="#Overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h3>
 
 <p>piDisplay is a 16x2 character LCD based minecraft server notification system. You will need a Minecraft server running this plugin and build the hardware decsribed in this guide. </p>
-<p align="center"><b>Current prototype</b><iframe width="560" height="315" src="images/PrototypeVideo.mp4" width="512"></iframe></p>
+<p align="center"><b>Current prototype</b><iframe width="480" height="270" src="images/PrototypeVideo.mp4" width="512"></iframe></p>
 
 <h3>
 <a id="designer-templates" class="anchor" href="#userguide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h3>
 
 <p>If you are not interested in playing with the code then just download the latest .jar file from the releases link.
-After downloading, copy it to your minecraft server plugins folder. Guidance on registering Twitter applications here.
+After downloading, copy it to your minecraft server plugins folder. 
 <br>Below here is placeholder from another plugin to be ignored.
-<br>Once complete you will need to note your Consumer Key (API Key),
-Consumer Secret (API Secret), Access Token and Access Token Secret. These should appear as long strings and you need to enter them into the plugin settings in order for the automation to work.
-</p>
-<p>Upon first run the plugin will write a config.yml to its subdirectory in your plugins folder. The default content for this file is as below
-<br>TWITTER_CONFIGURED: false
-<br>API_KEY: XXXX
-<br>API_SECRET: YYYY
-<br>token: ZZZ
-<br>secret: ABABAB
 
-<UL>Edit the file directly to use the keys saved from Twitter and change TWITTER_CONFIGURED to true to enable tweeting. Restart the server or reload the plugin using the console command. </p></UL>
-<UL><br><p align="center"><b>updateMineTwitConfig</b></p></UL>
+<UL><br><p align="center"><b>A heading to be used later</b></p></UL>
 <p> If you want to play with the source code then download the whole project from the links on the left. It was built in Eclipse using the Maven framework.</p>
 
 <h3>
 <a id="designer-templates" class="anchor" href="#userguide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Detailed configuration</h3>
 
-<p>The plugin has 3 commands that can control events are tweeted.</p>
-<UL><b>listNotification</b></br>Lists the current settings.</UL>
-<UL><b>setNotification [Notification name] [Status]</b></br>Sets any individual setting eg 
-</br>loggingInOut
-</br>blockPlacing
-</br>dying
-</br>taming
-</br>fishing
-</br>kicking
-</br>teleporting
-</br>enteringVehicle
-</br>duplicate
-</br>Setting any of the above to true or false switches the relevant notification to on or off. Default setting is true for all of them except blockPlacing and duplicates which are both false by default. Twitter has a limit of 180 tweets per 15 minute window so having blockPlacing switched on will easily exceed the limit when building. If this happens then the plugin will stop tweeting until the window is reopened. 
-</UL>
+<p>The plugin has 3 commands that can control events being displayed.</p>
+<UL><b>testCommand 1</b></br>Does some stuff.</UL>
+<UL><b>testCommand 2 [setting1] [setting2]</b></br>Does some other stuff</br></UL>
+<UL><b>testCommand 3</b></br>Even more stufff</UL>
 
-<UL><b>updateMineTwitConfig</b></br>Updates from config file</UL>
-<p>It should be noted that restarting the server after manually editing config.yml will have broadly the same effect except that in the case of an error it will revert to the defaults not the last known good value. For this reason it is recommended to either use the console commands to change parameters or use <b>updateMineTwitConfig</b> if manually editing.</p>
 <h3>
 <a id="designer-templates" class="anchor" href="#userguide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hardware build</h3>
 
-<p align="center"><b>Schematic.</b><a href="images/piDisplay.pdf"><img src="images/piDisplay.png" width="512"></a></p>
+<p align="center"><b>Breadboard</b><br>This shows the prototype I used for testing<a href="images/Breadboard.jpg"><img src="images/Breadboard.jpg" width="512"></a></p>
+
+<p align="center"><b>Schematic</b><br>The overall schematic, I used a 5V LCD which required level convertors for the 3.3V GPIO on the Pi. My life would have been easier if I'd just picked a 3.3V LCD in the first place. If you do this then you can just omit the level convertors.<a href="images/piDisplay.pdf"><img src="images/piDisplay.png" width="512"></a>
+<br>Note that the resistor values were tuned to the actual LEDs/LCD that I had, YMMV.</p>
+
+<p align="center"><b>Level convertor</b><br>These are the FDC6301N based level convertors that I used. At the time writing something like <a href="https://www.ebay.co.uk/itm/4-Channel-Bi-Directional-Logic-Level-Converter-3-3V-5V-Ardunio-ESP8266-etc/142603531109?hash=item2133d53365:g:MYwAAOSwyXNaHScq">this</a> should do the trick</a><a href="images/LevelConvertor.pdf"><img src="images/LevelConvertor.png" width="512"></a></p>
+
 
 
 <h3>
