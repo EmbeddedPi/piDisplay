@@ -2,10 +2,8 @@ package piDisplay;
 
 import java.io.File;
 import java.io.FileWriter;
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
 import java.io.RandomAccessFile;
-*/
+
 
 public class gpioControl {
 	
@@ -15,10 +13,7 @@ public class gpioControl {
 	private static final String devicePath= gpioPath + "/gpio%d";
 	private static final String directionPath= devicePath + "/direction";
 	private static final String valuePath= devicePath + "/value";
-	/*
-	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final int maxBuffer = 128;
-	*/
 	
 public static void initialiseGpio (int [] gpioChannel, String direction) {
 	// Open file handles for GPIO unexport and export
@@ -96,8 +91,6 @@ private static String getValuePath(int pinNumber) {
 	   return String.format(valuePath, pinNumber);
 }
 
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
 public static int readPin(int channel[]) {
 	RandomAccessFile[] raf = new RandomAccessFile[channel.length];
 	byte[] readData = new byte[maxBuffer];
@@ -131,10 +124,8 @@ public static int readPin(int channel[]) {
 	}
 	return -1;
 }
-*/
 
-/*
-TODO Temporarily pulled out read code, to be replaced after testing
+
 //Overloaded single integer version of readPin
 public static int readPin(int singleChannel) {
 	  int[] gpioChannel = {0};
@@ -142,6 +133,5 @@ public static int readPin(int singleChannel) {
 	  int singlePinData = readPin(gpioChannel);
 	  return singlePinData;	  
 }
-*/
 
 }

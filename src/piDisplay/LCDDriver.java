@@ -7,25 +7,18 @@ public class LCDDriver {
 	private static final String gpioHigh = "1";
 	private static final String gpioLow = "0";
 	private static final String gpioOut = "out";
-	/*
-	TODO Temporarily pulled out read code, to be replaced after testing
 	private static final String gpioIn = "in";
-	*/
 	private static final int backlightLED = 14;
 	//Specify pins for control channel in order {RS,R/W,E}
 	private static final int [] controlChannel = {24,18,23};
 	private static final int RS = 0;
-	// Central pin for readWrite not currently used
 	private static final int readWrite = 1;
 	private static final int enable = 2;
+	//Original 8 bit parallel designation
 	//private static final int[] dataChannelP = {7,8,25,24,23,18,15,14};
 	//Specify pins for data channel in order {D4,D5,D6,D7}
 	private static final int[] dataChannel = {7,8,25,15};
-	/*
-	TODO Temporarily pulled out read code, to be replaced after testing
-	//Set busy flag to DB7 from control channel
 	private static final int busyFlagPin = dataChannel[3];
-	*/
 
 public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
@@ -226,6 +219,7 @@ public static int testByteRead() {
 	gpioControl.initialiseGpio(dataChannel, gpioOut);
 	return dataByte;
 }
+*/
 
 // TODO change back to private once tested
 public static Boolean busyFlagCheck() {
@@ -246,6 +240,7 @@ public static Boolean busyFlagCheck() {
 	return busyFlag;
 }
 
+/*
 // TODO Possibly remove this after testing
 private integer commandRead(Integer command) {
 	// TODO Code to confirm busyCheck() == false before continuing
