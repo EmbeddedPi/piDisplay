@@ -33,6 +33,10 @@ public static void initialiseLCD () {
 	commandWrite(0x28);
 	// Entry mode set :Increment auto, display shift off
 	commandWrite(0x06);
+	// Test code for busy flag as longest write cycle
+	// Return home for cursor
+	commandWrite(0x02);
+	System.out.println("Final binary is " + busyFlagCheck());
 	// Display control : display on, cursor on, no blinking
 	commandWrite(0x0E);;
 	// Clear display, set cursor position to zero
