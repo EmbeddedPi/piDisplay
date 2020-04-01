@@ -8,6 +8,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 // Test code to be removed once LCD driver is working
 import org.bukkit.entity.Player;
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+import java.net.InetAddress;
+
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockPlaceEvent;
 // End of test code to be removed once LCD driver is working
@@ -115,6 +120,67 @@ public final class Main extends JavaPlugin implements Listener {
     	// The following lines are for test purposes only
     	debugMessage();
     }
+    
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {    
+      if (cmd.getName().equalsIgnoreCase("backlight")) { 
+        getLogger().info("I've recognised a backlight command");
+        // Check a correct number of arguments
+        if (args.length <1) {
+          sender.sendMessage("This needs an argument!");
+          return false;
+        } else if (args.length >1) {
+          sender.sendMessage("Calm down, too many arguments!");
+          return false;
+        } else {
+          // Command is valid, check argument is valid 
+          if (args[0].equalsIgnoreCase("on")) {
+        	  // Switch on backlight
+        	  LCDDriver.backlightControl (backlightOn);
+        	  sender.sendMessage("Backlight switched " + args[0]);
+        	  return true;
+          } else if (args[0].equalsIgnoreCase("off")) {
+        	  // Switch off backlight
+        	  LCDDriver.backlightControl (backlightOn);
+              sender.sendMessage("Backlight switched " + args[0]);
+              return true;
+          } else {
+              sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
+              return false;
+          }
+        }
+      } else if (cmd.getName().equalsIgnoreCase("powerLED")) { 	  
+    	  getLogger().info("I've recognised a powerLED command");
+          // Check a correct number of arguments
+          if (args.length < 1) {
+            sender.sendMessage("This needs an argument!");
+            return false;
+          } else if (args.length >1) {
+            sender.sendMessage("Calm down, too many arguments!");
+            return false;
+          } else {
+        	// Command is valid, check argument is valid 
+              if (args[0].equalsIgnoreCase("on")) {
+            	  // Switch on power LED
+            	  gpioControl.writePin (powerLED, LEDOn);
+            	  sender.sendMessage("Power LED switched " + args[0]);
+            	  return true;
+              } else if (args[0].equalsIgnoreCase("off")) {
+            	  // Switch off power LED
+            	  gpioControl.writePin (powerLED, LEDOn);
+                  sender.sendMessage("Power LED switched " + args[0]);
+                  return true;
+              } else {
+                  sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
+                  return false;
+              }
+          }
+      } else {
+        getLogger().info("Gibberish or a typo, either way it ain't happening");
+        return false; 
+      }
+    }    
      
    // Detect when a block has been placed, 
    // Test code to be removed once LCD driver is written and tested

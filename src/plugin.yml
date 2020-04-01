@@ -1,3 +1,16 @@
 name: piDisplay
 main: piDisplay.Main
 version: 0.6
+author: EmbeddedPi
+description: This plugin ouptputs server events to an external HD44780 based LCD display.
+commands:
+   backlight:
+      description: Switches backlight on/off.
+      usage: /backlight [on/off]
+      permission: op
+      permission-message: As if, op only!
+   powerLED:
+      description: Switches powerLED on/off.
+      usage: /powerLED [on/off]
+      permission: op
+      permission-message: Nae chance, op only!
