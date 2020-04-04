@@ -36,7 +36,7 @@ public static void initialiseLCD () {
 	// Test code for busy flag as longest write cycle
 	// Return home for cursor
 	commandWrite(0x02);
-	System.out.println("Final binary is " + busyFlagCheck());
+	//System.out.println("Final binary is " + busyFlagCheck());
 	// Display control : display on, cursor on, no blinking
 	commandWrite(0x0E);;
 	// Clear display, set cursor position to zero
@@ -226,6 +226,7 @@ public static int testByteRead() {
 */
 
 // TODO change back to private once tested
+/*
 public static Boolean busyFlagCheck() {
 	// Assume busy by default
 	Boolean busyFlag = true;
@@ -243,6 +244,7 @@ public static Boolean busyFlagCheck() {
 	}
 	return busyFlag;
 }
+*/
 
 /*
 // TODO Possibly remove this after testing

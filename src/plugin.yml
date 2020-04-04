@@ -1,6 +1,6 @@
 name: piDisplay
 main: piDisplay.Main
-version: 0.6
+version: 0.61
 author: EmbeddedPi
 description: This plugin ouptputs server events to an external HD44780 based LCD display.
 commands:
