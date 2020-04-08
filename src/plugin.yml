@@ -14,3 +14,9 @@ commands:
       usage: /powerLED [on/off]
       permission: op
       permission-message: Nae chance, op only!
+   displaySend:
+      description: Switches powerLED on/off.
+      usage: /displaySend [message]
+      permission: op
+      permission-message: Oh no you don't!
+      

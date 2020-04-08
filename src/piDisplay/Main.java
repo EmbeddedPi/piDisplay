@@ -31,6 +31,8 @@ public final class Main extends JavaPlugin implements Listener {
 	// private static String LCDStatus = "Off";
 	private static final String LEDOn = "1";
 	private static final String LEDOff = "0";
+	//Test line to debug backlight issues
+	private static final int backlightLED = 14;
 	//Backlight LED is active low
 	private static final String backlightOn = "0";
 	private static final String backlightOff = "1";
@@ -49,7 +51,8 @@ public final class Main extends JavaPlugin implements Listener {
 		// Switch on power LED
 		gpioControl.writePin (powerLED, LEDOn);
 		//Switch on backlight
-		LCDDriver.backlightControl (backlightOn);
+		//LCDDriver.backlightControl (backlightOn);
+		gpioControl.writePin (backlightLED, backlightOn);
 		// TODO Make a list of players on server with an ArrayList
 		getLogger().info("piDisplay is ready to display stuff"); 
 		// LCDDriver.clearLine(1);
@@ -73,7 +76,8 @@ public final class Main extends JavaPlugin implements Listener {
     	LCDDriver.commandWrite(0x01);
     	// Switch off display
     	LCDDriver.commandWrite(0x0A);    	
-    	LCDDriver.backlightControl (backlightOff);
+    	//LCDDriver.backlightControl (backlightOff);
+    	gpioControl.writePin (backlightLED, backlightOff);
     	// Switch off power LED
     	gpioControl.writePin (powerLED, LEDOff);
     	getLogger().info("piDisplay has switched off");
@@ -138,12 +142,14 @@ public final class Main extends JavaPlugin implements Listener {
           // Command is valid, check argument is valid 
           if (args[0].equalsIgnoreCase("on")) {
         	  // Switch on backlight
-        	  LCDDriver.backlightControl (backlightOn);
+        	  //LCDDriver.backlightControl (backlightOn);
+        	  gpioControl.writePin (backlightLED, backlightOn);
         	  sender.sendMessage("Backlight switched " + args[0]);
         	  return true;
           } else if (args[0].equalsIgnoreCase("off")) {
         	  // Switch off backlight
-        	  LCDDriver.backlightControl (backlightOn);
+        	  //LCDDriver.backlightControl (backlightOff);
+        	  gpioControl.writePin (backlightLED, backlightOff);
               sender.sendMessage("Backlight switched " + args[0]);
               return true;
           } else {
@@ -169,7 +175,7 @@ public final class Main extends JavaPlugin implements Listener {
             	  return true;
               } else if (args[0].equalsIgnoreCase("off")) {
             	  // Switch off power LED
-            	  gpioControl.writePin (powerLED, LEDOn);
+            	  gpioControl.writePin (powerLED, LEDOff);
                   sender.sendMessage("Power LED switched " + args[0]);
                   return true;
               } else {
@@ -177,7 +183,29 @@ public final class Main extends JavaPlugin implements Listener {
                   return false;
               }
           }
-      } else {
+      } else if (cmd.getName().equalsIgnoreCase("displaySend")) { 
+    	  if (args.length <1) {
+              sender.sendMessage("This needs an argument!");
+              return false;
+            //} else if (args.length >1) {
+            //  sender.sendMessage("Calm down, too many arguments!");
+            //  return false;
+            } else {
+          	  	int i=0;
+          	  	String displayString ="";
+            	for (i=0; i<(args.length-1); i++) {
+            		// Display message
+            		displayString += args[i] + " ";
+            	} 
+            	displayString += args[args.length-1];
+            	LCDDriver.clearLine(1);
+        		LCDDriver.writeString(displayString);
+        		sender.sendMessage(displayString + " displayed ");
+            	return true;
+            }
+      }
+      
+      else {
         getLogger().info("Gibberish or a typo, either way it ain't happening");
         return false; 
       }
