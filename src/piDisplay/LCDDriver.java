@@ -29,18 +29,20 @@ public static void initialiseLCD () {
 	// Initialisation code
 	// Function set : 8 bit interface, 2 display lines, 5x8 font
 	//commandWrite(0x38);
+	// Function set : 4 bit interface, only writes MSB
+	initialise4BitWrite(0x20);
 	// Function set : 4 bit interface, 2 display lines, 5x8 font
-	commandWrite(0x28);
+	initialiseWrite(0x28);
 	// Entry mode set :Increment auto, display shift off
-	commandWrite(0x06);
+	initialiseWrite(0x06);
 	// Test code for busy flag as longest write cycle
 	// Return home for cursor
-	commandWrite(0x02);
+	initialiseWrite(0x02);
 	//System.out.println("Final binary is " + busyFlagCheck());
 	// Display control : display on, cursor on, no blinking
-	commandWrite(0x0E);;
+	initialiseWrite(0x0E);;
 	// Clear display, set cursor position to zero
-	commandWrite(0x01);
+	initialiseWrite(0x01);
 	// Sets cursor to start of line 1
 	commandWrite(0x80);
 	writeString(">>Initialised.<<");	
@@ -75,6 +77,31 @@ public static void clearLine(int line) {
 	}
 	// Reset cursor to start of line
 	commandWrite(0x80 + (line) * 0x40);
+}
+
+//Method for writing initialisation commands to display, no busy flag check
+public static void initialise4BitWrite(Integer sendData) {
+	String command = checkByte(sendData);
+	String commandMSB = command.substring(0,4);
+	gpioControl.writePin (controlChannel[RS], gpioLow);
+	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	writeByte(commandMSB);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+}
+
+//Method for writing initialisation commands to display, no busy flag check
+public static void initialiseWrite(Integer sendData) {
+	String command = checkByte(sendData);
+	String commandMSB = command.substring(0,4);
+	String commandLSB = command.substring(4);
+	gpioControl.writePin (controlChannel[RS], gpioLow);
+	gpioControl.writePin (controlChannel[readWrite], gpioLow);
+	writeByte(commandMSB);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
+	writeByte(commandLSB);
+	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
 //Method for writing commands to display
