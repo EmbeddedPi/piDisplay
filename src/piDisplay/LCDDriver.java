@@ -1,5 +1,7 @@
 package piDisplay;
 
+import java.util.concurrent.TimeUnit;
+
 public class LCDDriver {
 	
 	private static final int lineLength = 16;
@@ -29,20 +31,35 @@ public static void initialiseLCD () {
 	// Initialisation code
 	// Function set : 8 bit interface, 2 display lines, 5x8 font
 	//commandWrite(0x38);
-	// Function set : 4 bit interface, only writes MSB
-	initialise4BitWrite(0x20);
-	// Function set : 4 bit interface, 2 display lines, 5x8 font
-	initialiseWrite(0x28);
-	// Entry mode set :Increment auto, display shift off
-	initialiseWrite(0x06);
-	// Test code for busy flag as longest write cycle
-	// Return home for cursor
-	initialiseWrite(0x02);
-	//System.out.println("Final binary is " + busyFlagCheck());
-	// Display control : display on, cursor on, no blinking
-	initialiseWrite(0x0E);;
-	// Clear display, set cursor position to zero
-	initialiseWrite(0x01);
+	try {
+		TimeUnit.MILLISECONDS.sleep(100);
+		initialiseNibbleWrite(0x03);
+		TimeUnit.MILLISECONDS.sleep(5);
+		initialiseNibbleWrite(0x03);
+		TimeUnit.MICROSECONDS.sleep(120);
+		initialiseNibbleWrite(0x03);
+		TimeUnit.MICROSECONDS.sleep(120);
+		// Function set : 4 bit interface, only writes MSB
+		initialiseNibbleWrite(0x02);
+		TimeUnit.MICROSECONDS.sleep(120);
+		// Function set : 4 bit interface, 2 display lines, 5x8 font
+		initialiseWrite(0x28);
+		TimeUnit.MICROSECONDS.sleep(50);
+		// Display control : display on, cursor on, no blinking
+		initialiseWrite(0x0E);
+		TimeUnit.MICROSECONDS.sleep(50);
+		// Clear display, set cursor position to zero
+		initialiseWrite(0x01);
+		TimeUnit.MILLISECONDS.sleep(5);
+		// Entry mode set :Increment auto, display shift off
+		initialiseWrite(0x06);
+		TimeUnit.MICROSECONDS.sleep(50);
+		// Return home for cursor
+		initialiseWrite(0x02);
+		TimeUnit.MILLISECONDS.sleep(2);
+	} catch (InterruptedException ie) {
+		Thread.currentThread().interrupt();
+	}
 	// Sets cursor to start of line 1
 	commandWrite(0x80);
 	writeString(">>Initialised.<<");	
@@ -80,7 +97,7 @@ public static void clearLine(int line) {
 }
 
 //Method for writing initialisation commands to display, no busy flag check
-public static void initialise4BitWrite(Integer sendData) {
+public static void initialiseNibbleWrite(Integer sendData) {
 	String command = checkByte(sendData);
 	String commandMSB = command.substring(0,4);
 	gpioControl.writePin (controlChannel[RS], gpioLow);
