@@ -132,42 +132,56 @@ public final class Main extends JavaPlugin implements Listener {
       if (cmd.getName().equalsIgnoreCase("backlight")) { 
         getLogger().info("I've recognised a backlight command");
         // Check a correct number of arguments
-        if (args.length <1) {
-          sender.sendMessage("This needs an argument!");
-          return false;
-        } else if (args.length >1) {
-          sender.sendMessage("Calm down, too many arguments!");
-          return false;
+        if (!checkArgs(sender, args.length, 1)) {
+        	return false; 
         } else {
-          // Command is valid, check argument is valid 
-          if (args[0].equalsIgnoreCase("on")) {
-        	  // Switch on backlight
-        	  //LCDDriver.backlightControl (backlightOn);
-        	  gpioControl.writePin (backlightLED, backlightOn);
-        	  sender.sendMessage("Backlight switched " + args[0]);
-        	  return true;
-          } else if (args[0].equalsIgnoreCase("off")) {
-        	  // Switch off backlight
-        	  //LCDDriver.backlightControl (backlightOff);
-        	  gpioControl.writePin (backlightLED, backlightOff);
-              sender.sendMessage("Backlight switched " + args[0]);
-              return true;
-          } else {
-              sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
-              return false;
-          }
+        	// Command is valid, check argument is valid 
+        	if (args[0].equalsIgnoreCase("on")) {
+        		// Switch on backlight
+        		//LCDDriver.backlightControl (backlightOn);
+        		gpioControl.writePin (backlightLED, backlightOn);
+        		sender.sendMessage("Backlight switched " + args[0]);
+        		return true;
+        	} else if (args[0].equalsIgnoreCase("off")) {
+        		// Switch off backlight
+        		//LCDDriver.backlightControl (backlightOff);
+        		gpioControl.writePin (backlightLED, backlightOff);
+        		sender.sendMessage("Backlight switched " + args[0]);
+        		return true;
+        	} else {
+        		sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
+        		return false;
+        	}
         }
+      } else if (cmd.getName().equalsIgnoreCase("display")) { 	  
+    	  getLogger().info("I've recognised a display command");
+          // Check a correct number of arguments
+    	  if (!checkArgs(sender, args.length, 1)) {
+          	return false; 
+          } else {
+        	  // Command is valid, check argument is valid 
+              if (args[0].equalsIgnoreCase("on")) {
+            	  // Switch on power LED
+            	  LCDDriver.display ("On");
+            	  sender.sendMessage("Display switched " + args[0]);
+            	  return true;
+              } else if (args[0].equalsIgnoreCase("off")) {
+            	  // Switch off power LED
+            	  LCDDriver.display ("off");
+                  sender.sendMessage("Display switched " + args[0]);
+                  return true;
+              } else {
+                  sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
+                  return false;
+              }
+          }           
       } else if (cmd.getName().equalsIgnoreCase("powerLED")) { 	  
     	  getLogger().info("I've recognised a powerLED command");
           // Check a correct number of arguments
-          if (args.length < 1) {
-            sender.sendMessage("This needs an argument!");
-            return false;
-          } else if (args.length >1) {
-            sender.sendMessage("Calm down, too many arguments!");
-            return false;
-          } else {
-        	// Command is valid, check argument is valid 
+    	  if (!checkArgs(sender, args.length, 1)) {
+            	return false; 
+           } else {
+           // Command is valid, check argument is valid 
               if (args[0].equalsIgnoreCase("on")) {
             	  // Switch on power LED
             	  gpioControl.writePin (powerLED, LEDOn);
@@ -184,13 +198,9 @@ public final class Main extends JavaPlugin implements Listener {
               }
           }
       } else if (cmd.getName().equalsIgnoreCase("displaySend")) { 
-    	  if (args.length <1) {
-              sender.sendMessage("This needs an argument!");
-              return false;
-            //} else if (args.length >1) {
-            //  sender.sendMessage("Calm down, too many arguments!");
-            //  return false;
-            } else {
+    	  if (!checkArgs(sender, args.length, 42)) {
+          	return false; 
+         } else {
           	  	int i=0;
           	  	String displayString ="";
             	for (i=0; i<(args.length-1); i++) {
@@ -278,6 +288,29 @@ public final class Main extends JavaPlugin implements Listener {
     	getLogger().info("Are they local is " + areYouLocal);
     	getLogger().info("Locals online = " + local);
     	getLogger().info("Not locals online = " + notLocal);
+    }
+    
+    private boolean checkArgs(CommandSender sender, int argsLength, int argsRequired) {
+    	//If 42 args required, don't panic as long as 1 is there, you have your towel with you
+    	if (argsRequired==42) {
+    		if (argsLength==0) {
+    			sender.sendMessage("This needs an argument!");
+    			return false;	
+    		} else {
+    			return true;
+    		}
+    	//Otherwise just check correct number of arguments
+    	} else { 
+    		if (argsLength>argsRequired) {
+    			sender.sendMessage("Calm down, too many arguments!");
+    			return false;
+    		} else if (argsLength>argsRequired) {
+    			sender.sendMessage("Liven things up, an argument is needed!");
+    			return false;
+    		} else {
+    			return true;
+    		}	
+    	}
     }
 }
 

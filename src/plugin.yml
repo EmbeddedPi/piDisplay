@@ -9,6 +9,11 @@ commands:
       usage: /backlight [on/off]
       permission: op
       permission-message: As if, op only!
+   display:
+      description: Switches display on/off.
+      usage: /display [on/off]
+      permission: op
+      permission-message: jog on sunshine!
    powerLED:
       description: Switches powerLED on/off.
       usage: /powerLED [on/off]

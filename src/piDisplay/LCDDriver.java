@@ -85,6 +85,19 @@ public static void writeString(String textString) {
 	}
 }
 
+//Method for switching display on/off
+public static void display (String status) {	
+	  if (status.equalsIgnoreCase("on")) {
+		  //Switch display on, cursor on
+		  commandWrite(0x0E);
+	  } else if (status.equalsIgnoreCase("off")){
+		  //Switch display off, cursor on
+		  commandWrite(0x0A);
+	  } else {
+		  System.out.println("Status needs to be on or off, " + status + " is not a valid argument.");    
+	  }
+}
+
 //Method for clear line
 public static void clearLine(int line) {
 	// set cursor to start of required line
