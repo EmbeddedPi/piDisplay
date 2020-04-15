@@ -58,7 +58,8 @@ public static void initialiseLCD () {
 		initialiseWrite(0x02);
 		TimeUnit.MILLISECONDS.sleep(2);
 	} catch (InterruptedException ie) {
-		Thread.currentThread().interrupt();
+		Thread.currentThread().interrupt();		  
+		System.out.println("Error with initialisation, " + ie); 
 	}
 	// Sets cursor to start of line 1
 	commandWrite(0x80);

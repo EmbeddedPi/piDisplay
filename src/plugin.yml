@@ -4,6 +4,11 @@ version: 0.61
 author: EmbeddedPi
 description: This plugin ouptputs server events to an external HD44780 based LCD display.
 commands:
+   initialise:
+      description: Runs initialise routine.
+      usage: /initialise
+      permission: op
+      permission-message: Nope, op only!
    backlight:
       description: Switches backlight on/off.
       usage: /backlight [on/off]

@@ -75,7 +75,7 @@ public final class Main extends JavaPlugin implements Listener {
     	// Clear display
     	LCDDriver.commandWrite(0x01);
     	// Switch off display
-    	LCDDriver.commandWrite(0x0A);    	
+    	LCDDriver.display ("off");	
     	//LCDDriver.backlightControl (backlightOff);
     	gpioControl.writePin (backlightLED, backlightOff);
     	// Switch off power LED
@@ -174,7 +174,16 @@ public final class Main extends JavaPlugin implements Listener {
                   sender.sendMessage("Status needs to be on or off, " + args[0] + " is not a valid argument.");
                   return false;
               }
-          }           
+          }    
+      } else if (cmd.getName().equalsIgnoreCase("initialise")) { 	  
+    	  getLogger().info("I've recognised an initialise command");
+          // Check a correct number of arguments
+    	  if (!checkArgs(sender, args.length, 0)) {
+    		  return false; 
+          } else {
+        	  LCDDriver.initialiseLCD ();
+        	  return true;
+          }
       } else if (cmd.getName().equalsIgnoreCase("powerLED")) { 	  
     	  getLogger().info("I've recognised a powerLED command");
           // Check a correct number of arguments
@@ -300,11 +309,23 @@ public final class Main extends JavaPlugin implements Listener {
     			return true;
     		}
     	//Otherwise just check correct number of arguments
-    	} else { 
+    	} else if (argsRequired==0){ 
+    		if (argsLength>argsRequired) {
+    			sender.sendMessage("Calm down, this requires no arguments");
+    			return false;
+    		} else if (argsLength<argsRequired) {
+    			sender.sendMessage("How on earth did you manage that?");
+    			return false;
+    		} else {
+    			return true;
+    		}	
+    	}
+    	
+    	{ 
     		if (argsLength>argsRequired) {
     			sender.sendMessage("Calm down, too many arguments!");
     			return false;
-    		} else if (argsLength>argsRequired) {
+    		} else if (argsLength<argsRequired) {
     			sender.sendMessage("Liven things up, an argument is needed!");
     			return false;
     		} else {
