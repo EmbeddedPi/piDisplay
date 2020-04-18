@@ -128,7 +128,8 @@ public final class Main extends JavaPlugin implements Listener {
     
     
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {    
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    	int intArgs;
       if (cmd.getName().equalsIgnoreCase("backlight")) { 
         getLogger().info("I've recognised a backlight command");
         // Check a correct number of arguments
@@ -183,6 +184,23 @@ public final class Main extends JavaPlugin implements Listener {
           } else {
         	  LCDDriver.initialiseLCD ();
         	  return true;
+          }
+    	  
+    	  
+      } else if (cmd.getName().equalsIgnoreCase("initLCD")) { 	  
+    	  getLogger().info("I've recognised an initLCD command");
+          // Check a correct number of arguments
+    	  if (!checkArgs(sender, args.length, 1)) {
+    		  return false; 
+          } else {
+        	  if (isInteger(args[0])) {
+        		  intArgs = Integer.parseInt(args[0]);
+        		  LCDDriver.initLCD (intArgs);
+        	  return true;
+        	  } else {
+        		  sender.sendMessage("Argument needs to be an integer, " + args[0] + " is not.");
+        		  return false;
+        	  }
           }
       } else if (cmd.getName().equalsIgnoreCase("powerLED")) { 	  
     	  getLogger().info("I've recognised a powerLED command");
@@ -332,6 +350,30 @@ public final class Main extends JavaPlugin implements Listener {
     			return true;
     		}	
     	}
+    }
+    
+    private static boolean isInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

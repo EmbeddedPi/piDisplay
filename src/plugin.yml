@@ -9,6 +9,11 @@ commands:
       usage: /initialise
       permission: op
       permission-message: Nope, op only!
+   initLCD:
+      description: Runs initialise steps.
+      usage: /initialise [stepnumber]
+      permission: op
+      permission-message: Nope, op only!
    backlight:
       description: Switches backlight on/off.
       usage: /backlight [on/off]

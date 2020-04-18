@@ -22,45 +22,132 @@ public class LCDDriver {
 	private static final int[] dataChannel = {7,8,25,15};
 	private static final int busyFlagPin = dataChannel[3];
 
+	
+//Test method to debug initialise issues
+public static void initLCD(int number) {
+	switch (number) {	
+		case 1:
+			//Set port direction
+			gpioControl.initialiseGpio (backlightLED, gpioOut);
+			gpioControl.initialiseGpio (controlChannel, gpioOut);
+			gpioControl.initialiseGpio (dataChannel, gpioOut);
+			break;	
+		case 2:
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+				initialiseNibbleWrite(0x03);
+				TimeUnit.MILLISECONDS.sleep(5);
+				initialiseNibbleWrite(0x03);
+				TimeUnit.MICROSECONDS.sleep(120);
+				initialiseNibbleWrite(0x03);
+				TimeUnit.MICROSECONDS.sleep(120);
+				initialiseNibbleWrite(0x02);
+				TimeUnit.MICROSECONDS.sleep(120);
+				// Function set : 4 bit interface, 2 display lines, 5x8 font
+				initialiseWrite(0x28);
+				TimeUnit.MICROSECONDS.sleep(50);
+			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();		  
+				System.out.println("Error with init step 2, " + ie); 
+			}
+			break;		
+		case 3:
+			try {
+				// Display control : display on, cursor on, no blinking
+				initialiseWrite(0x0E);
+				TimeUnit.MICROSECONDS.sleep(50);
+				// Clear display, set cursor position to zero
+				initialiseWrite(0x01);
+				TimeUnit.MILLISECONDS.sleep(5);
+				// Entry mode set :Increment auto, display shift off
+				initialiseWrite(0x06);
+				TimeUnit.MICROSECONDS.sleep(50);
+				// Return home for cursor
+				initialiseWrite(0x02);
+				TimeUnit.MILLISECONDS.sleep(2);
+			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();		  
+				System.out.println("Error with init step 3, " + ie); 
+			}		
+			break;	
+		case 4:
+			//Switch backlight on
+			backlightControl(gpioLow);
+			// Sets cursor to start of line 1
+			commandWrite(0x80);
+			writeString(">>Initialised.<<");	
+			// Switch cursor to start of line 2
+			commandWrite(0xC0);
+			writeString ("piDisplay online");
+			break;	
+		case 5:
+			initLCD(1);
+			initLCD(1);
+			initLCD(2);
+			initLCD(3);
+			initLCD(4);
+			break;	
+		case 6:
+			initLCD(1);
+			initLCD(2);
+			initLCD(3);
+			initLCD(4);
+			break;	
+		default:
+			System.out.println("Not a recognised initLCD command"); 
+	}
+}
+
+
 public static void initialiseLCD () {
 	gpioControl.initialiseGpio (backlightLED, gpioOut);
 	gpioControl.initialiseGpio (controlChannel, gpioOut);
 	gpioControl.initialiseGpio (dataChannel, gpioOut);
-	backlightControl(gpioLow);
-	sleep(0);
 	// Initialisation code
 	// Function set : 8 bit interface, 2 display lines, 5x8 font
 	//commandWrite(0x38);
 	try {
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MILLISECONDS.sleep(100);
 		initialiseNibbleWrite(0x03);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MILLISECONDS.sleep(5);
 		initialiseNibbleWrite(0x03);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(120);
 		initialiseNibbleWrite(0x03);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(120);
 		// Function set : 4 bit interface, only writes MSB
 		initialiseNibbleWrite(0x02);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(120);
 		// Function set : 4 bit interface, 2 display lines, 5x8 font
 		initialiseWrite(0x28);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(50);
 		// Display control : display on, cursor on, no blinking
 		initialiseWrite(0x0E);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(50);
 		// Clear display, set cursor position to zero
 		initialiseWrite(0x01);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MILLISECONDS.sleep(5);
 		// Entry mode set :Increment auto, display shift off
 		initialiseWrite(0x06);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MICROSECONDS.sleep(50);
 		// Return home for cursor
 		initialiseWrite(0x02);
+		//TimeUnit.SECONDS.sleep(1);
 		TimeUnit.MILLISECONDS.sleep(2);
 	} catch (InterruptedException ie) {
 		Thread.currentThread().interrupt();		  
 		System.out.println("Error with initialisation, " + ie); 
 	}
+	//Switch backlight on
+	backlightControl(gpioLow);
 	// Sets cursor to start of line 1
 	commandWrite(0x80);
 	writeString(">>Initialised.<<");	
@@ -116,8 +203,9 @@ public static void initialiseNibbleWrite(Integer sendData) {
 	String commandMSB = command.substring(0,4);
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(commandMSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(commandMSB);
+	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
 //Method for writing initialisation commands to display, no busy flag check
@@ -127,11 +215,11 @@ public static void initialiseWrite(Integer sendData) {
 	String commandLSB = command.substring(4);
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(commandMSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(commandMSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
-	writeByte(commandLSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(commandLSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
@@ -146,11 +234,11 @@ public static void commandWrite(Integer sendData) {
 	String commandLSB = command.substring(4);
 	gpioControl.writePin (controlChannel[RS], gpioLow);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(commandMSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(commandMSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
-	writeByte(commandLSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(commandLSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
@@ -164,16 +252,16 @@ private static void dataWrite(Integer sendData) {
 	String dataLSB = data.substring(4);
 	gpioControl.writePin (controlChannel[RS], gpioHigh);
 	gpioControl.writePin (controlChannel[readWrite], gpioLow);
-	writeByte(dataMSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(dataMSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
-	writeByte(dataLSB);
 	gpioControl.writePin (controlChannel[enable], gpioHigh);
+	writeNibble(dataLSB);
 	gpioControl.writePin (controlChannel[enable], gpioLow);
 }
 
 //4 bit interface version
-private static void writeByte (String dataByte) {
+private static void writeNibble (String dataByte) {
 	// TODO Code to confirm busyCheck() == false before continuing
 	/*
 	 * While (busyFlagCheck()) {
